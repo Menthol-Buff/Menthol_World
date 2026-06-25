@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menthol World</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep:    #0d0f12;
+      --bg-card:    #161a1f;
+      --bg-surface: #1e2329;
+      --text-primary:   #e8e6e3;
+      --text-secondary: #a1a5aa;
+      --text-muted:     #6b6f75;
+      --accent:     #f0a34b;
+      --accent-dim: #b87a2e;
+      --neon-cyan:  #3ccfcf;
+      --neon-pink:  #e0529e;
+      --border:     #2a2f36;
+      --radius: 8px;
+      --font-display: 'Georgia', 'Noto Serif SC', serif;
+      --font-body:    'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Hero / 头图 ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 100%, #1a1f2b 0%, #0d0f12 60%);
+    }
+
+    /* 城市天际线 */
+    .skyline {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 45%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .skyline svg { width: 100%; height: 100%; }
+
+    /* 雾气 */
+    .fog {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30%;
+      background: linear-gradient(to top, rgba(13,15,18,0.95) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* 悬浮粒子 */
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: floatUp 6s infinite ease-in;
+      opacity: 0;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.6; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+
+    /* 文字层 */
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      padding: 2rem;
+    }
+
+    .hero-brand {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 7vw, 6rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: linear-gradient(180deg, #ffffff 20%, #c4b5a5 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-sub {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-bottom: 2rem;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-line {
+      width: 80px;
+      height: 2px;
+      background: var(--accent);
+      margin: 0 auto 2rem;
+      border-radius: 1px;
+    }
+
+    .hero-desc {
+      max-width: 560px;
+      margin: 0 auto;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 2;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      z-index: 3;
+      animation: bounce 2s infinite;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      cursor: default;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    /* ===== 引言区 ===== */
+    .intro {
+      position: relative;
+      z-index: 3;
+      padding: 6rem 2rem;
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .intro-label {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+      margin-bottom: 2rem;
+    }
+
+    .intro-quote {
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+      color: var(--text-primary);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .intro-quote::before { content: '「'; color: var(--accent-dim); }
+    .intro-quote::after  { content: '」'; color: var(--accent-dim); }
+
+    .intro-body {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 2;
+    }
+
+    /* ===== 角色卡片 ===== */
+    .characters {
+      position: relative;
+      z-index: 3;
+      padding: 4rem 2rem 8rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 0.8rem;
+      color: var(--text-primary);
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 3rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .card:hover {
+      border-color: var(--accent-dim);
+      transform: translateY(-4px);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+      color: var(--text-primary);
+    }
+
+    .card-role {
+      font-size: 0.8rem;
+      color: var(--accent-dim);
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    /* ===== 页脚 ===== */
+    .footer {
+      position: relative;
+      z-index: 3;
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .footer .accent { color: var(--accent-dim); }
+
+    /* ===== 响应式微调 ===== */
+    @media (max-width: 600px) {
+      .intro { padding: 4rem 1.5rem; }
+      .characters { padding: 2rem 1rem 6rem; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ 头图 ============ -->
+  <section class="hero">
+    <!-- 城市天际线 SVG -->
+    <div class="skyline">
+      <svg viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 远楼（剪影层） -->
+        <rect x="60"  y="280" width="80"  height="220" fill="#11151a" rx="2"/>
+        <rect x="160" y="220" width="100" height="280" fill="#12161c" rx="2"/>
+        <rect x="280" y="260" width="70"  height="240" fill="#0f1318" rx="2"/>
+        <rect x="370" y="190" width="90"  height="310" fill="#14181e" rx="2"/>
+        <rect x="480" y="300" width="60"  height="200" fill="#101419" rx="2"/>
+        <rect x="560" y="170" width="110" height="330" fill="#13171d" rx="2"/>
+        <rect x="690" y="250" width="85"  height="250" fill="#11151b" rx="2"/>
+        <rect x="800" y="210" width="95"  height="290" fill="#12161c" rx="2"/>
+        <rect x="920" y="270" width="75"  height="230" fill="#0f1318" rx="2"/>
+        <rect x="1020" y="200" width="105" height="300" fill="#14181e" rx="2"/>
+        <rect x="1140" y="240" width="90"  height="260" fill="#11151b" rx="2"/>
+        <rect x="1250" y="180" width="80"  height="320" fill="#13171d" rx="2"/>
+        <rect x="1350" y="290" width="90"  height="210" fill="#0f1318" rx="2"/>
+
+        <!-- 窗户光点 -->
+        <g fill="#f0a34b" opacity="0.6">
+          <rect x="180" y="240" width="6" height="8" rx="1"/><rect x="195" y="260" width="6" height="8" rx="1"/>
+          <rect x="220" y="250" width="6" height="8" rx="1"/>
+          <rect x="390" y="220" width="6" height="8" rx="1"/><rect x="410" y="250" width="6" height="8" rx="1"/><rect x="430" y="210" width="6" height="8" rx="1"/>
+          <rect x="590" y="200" width="6" height="8" rx="1"/><rect x="615" y="240" width="6" height="8" rx="1"/><rect x="630" y="190" width="6" height="8" rx="1"/>
+          <rect x="820" y="240" width="6" height="8" rx="1"/><rect x="850" y="230" width="6" height="8" rx="1"/>
+          <rect x="1050" y="220" width="6" height="8" rx="1"/><rect x="1070" y="260" width="6" height="8" rx="1"/>
+          <rect x="1270" y="200" width="6" height="8" rx="1"/><rect x="1290" y="230" width="6" height="8" rx="1"/>
+        </g>
+        <!-- 霓虹光点 — 青色 -->
+        <g fill="#3ccfcf" opacity="0.5">
+          <rect x="300" y="280" width="5" height="7" rx="1"/><rect x="315" y="290" width="5" height="7" rx="1"/>
+          <rect x="720" y="270" width="5" height="7" rx="1"/><rect x="740" y="285" width="5" height="7" rx="1"/>
+          <rect x="1160" y="260" width="5" height="7" rx="1"/><rect x="1180" y="275" width="5" height="7" rx="1"/>
+        </g>
+        <!-- 霓虹光点 — 粉色 -->
+        <g fill="#e0529e" opacity="0.4">
+          <rect x="420" y="280" width="5" height="7" rx="1"/>
+          <rect x="880" y="260" width="5" height="7" rx="1"/><rect x="900" y="280" width="5" height="7" rx="1"/>
+          <rect x="1090" y="270" width="5" height="7" rx="1"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- 雾气渐变 -->
+    <div class="fog"></div>
+
+    <!-- 悬浮粒子 -->
+    <div class="particles" aria-hidden="true">
+      <div class="particle" style="left:10%; animation-delay:0s; animation-duration:7s;"></div>
+      <div class="particle" style="left:25%; animation-delay:2s; animation-duration:9s;"></div>
+      <div class="particle" style="left:40%; animation-delay:4s; animation-duration:6s;"></div>
+      <div class="particle" style="left:55%; animation-delay:1s; animation-duration:8s;"></div>
+      <div class="particle" style="left:70%; animation-delay:3s; animation-duration:10s;"></div>
+      <div class="particle" style="left:85%; animation-delay:5s; animation-duration:7.5s;"></div>
+      <div class="particle" style="left:15%; animation-delay:6s; animation-duration:8.5s;"></div>
+      <div class="particle" style="left:92%; animation-delay:0.5s; animation-duration:6.5s;"></div>
+    </div>
+
+    <!-- 文字内容 -->
+    <div class="hero-content">
+      <h1 class="hero-brand">Menthol World</h1>
+      <p class="hero-sub">—— 薄城 ——</p>
+      <div class="hero-line"></div>
+      <p class="hero-desc">
+        一座永不休眠的都市。霓虹灯下，千万条人生轨迹在此交织、碰撞、分岔。
+        每个人都是一本书，每个角落都藏着一个未被讲述的故事。
+      </p>
+    </div>
+
+    <div class="scroll-hint">▼  向 下 探 索</div>
+  </section>
+
+  <!-- ============ 引言 / 介绍 ============ -->
+  <section class="intro">
+    <p class="intro-label">· 缔造者之言 ·</p>
+    <p class="intro-quote">
+      这座城市的每个人，都是主角。
+    </p>
+    <p class="intro-body">
+      我是这个世界的缔造者，也是它的记录者。在这座薄城里，
+      我追踪着不同人物的生活轨迹——他们或许是深夜便利店的店员，
+      也许是摩天楼顶层俯瞰城市的精英，又或者是巷弄深处沉默的艺术家。
+      每一个故事都有自己独特的质地与温度：有些冷峻如黑白胶片，
+      有些迷幻如午夜霓虹，有些温暖如清晨的第一杯咖啡。<br><br>
+      欢迎你推开这扇门，走进他们的生活片段。
+    </p>
+  </section>
+
+  <!-- ============ 角色预览 ============ -->
+  <section class="characters">
+    <h2 class="section-title">城市居民</h2>
+    <p class="section-sub">以下是一些即将登场的面孔</p>
+
+    <div class="card-grid">
+
+      <div class="card">
+        <div class="card-icon">🌧️</div>
+        <div class="card-name">林屿</div>
+        <div class="card-role">深夜便利店 · 夜班店员</div>
+        <p class="card-desc">
+          他见过凌晨三点的城市最真实的模样。孤独的上班族、失恋的女孩、
+          烂醉的流浪汉……便利店的自动门每晚都在上演人间短剧。
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🥃</div>
+        <div class="card-name">苏晚</div>
+        <div class="card-role">地下酒吧 · 调酒师</div>
+        <p class="card-desc">
+          她的吧台是城市秘密的中转站。每一杯酒换一个故事，
+          她听过太多，却从不开口评判。冰块撞击玻璃的声音里，藏着无数人的心事。
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📷</div>
+        <div class="card-name">陆辞</div>
+        <div class="card-role">自由摄影师</div>
+        <p class="card-desc">
+          他的镜头追逐着城市中被遗忘的角落。破败的工厂、拆迁的老街、
+          凌晨四点的立交桥——他在废墟中寻找美的痕迹。
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">⌨️</div>
+        <div class="card-name">沈念</div>
+        <div class="card-role">互联网公司 · 程序员</div>
+        <p class="card-desc">
+          白天写代码，夜晚写小说。她在格子间与幻想世界之间反复横跳，
+          试图在算法与诗意之间找到一个属于自己的出口。
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🎸</div>
+        <div class="card-name">秦野</div>
+        <div class="card-role">地下乐队 · 主唱</div>
+        <p class="card-desc">
+          他的嗓音像被烟草和梦想浸泡过。排练室在地下三层，
+          但他们的音乐总能穿透水泥，触及那些在夜色中游荡的灵魂。
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">☕</div>
+        <div class="card-name">顾安然</div>
+        <div class="card-role">街角咖啡馆 · 老板</div>
+        <p class="card-desc">
+          她的咖啡馆是城市中的一座孤岛。推门进来的人各有各的故事，
+          而她用一杯手冲咖啡的时间，成为这座城市最温柔地倾听者。
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="footer">
+    <p>© 2026 <span class="accent">Menthol World</span> · 薄荷都市</p>
+    <p style="margin-top:0.5rem;">所有故事由缔造者创作 · 城市永远在生长</p>
+  </footer>
+
+</body>
+</html>
