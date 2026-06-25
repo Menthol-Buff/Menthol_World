@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menthol World</title>
+  <title>Menthol World — 薄城</title>
   <style>
     /* ===== Reset & Base ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-deep:    #0d0f12;
-      --bg-card:    #161a1f;
-      --bg-surface: #1e2329;
+      --bg-deep:    #0a0c10;
+      --bg-card:    #14181e;
+      --bg-surface: #1a1f27;
       --text-primary:   #e8e6e3;
       --text-secondary: #a1a5aa;
       --text-muted:     #6b6f75;
@@ -19,6 +19,13 @@
       --accent-dim: #b87a2e;
       --neon-cyan:  #3ccfcf;
       --neon-pink:  #e0529e;
+      --neon-purple:#8b5cf6;
+      --district-oldtown:   #d4945c;
+      --district-night:     #e0529e;
+      --district-industrial:#b87333;
+      --district-tech:      #3ccfcf;
+      --district-underground:#8b5cf6;
+      --district-riverside: #e2b04a;
       --border:     #2a2f36;
       --radius: 8px;
       --font-display: 'Georgia', 'Noto Serif SC', serif;
@@ -45,7 +52,7 @@
       justify-content: center;
       text-align: center;
       overflow: hidden;
-      background: radial-gradient(ellipse at 50% 100%, #1a1f2b 0%, #0d0f12 60%);
+      background: radial-gradient(ellipse at 50% 100%, #1a1f2b 0%, #0d1016 50%, #0a0c10 100%);
     }
 
     /* 城市天际线 */
@@ -54,7 +61,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 45%;
+      height: 50%;
       pointer-events: none;
       z-index: 1;
     }
@@ -67,8 +74,11 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 30%;
-      background: linear-gradient(to top, rgba(13,15,18,0.95) 0%, transparent 100%);
+      height: 35%;
+      background: linear-gradient(to top,
+        rgba(10,12,16,0.98) 0%,
+        rgba(10,12,16,0.6) 40%,
+        transparent 100%);
       pointer-events: none;
       z-index: 2;
     }
@@ -158,6 +168,254 @@
       50% { transform: translateY(8px); }
     }
 
+    /* ===== 过渡区 ===== */
+    .transition-zone {
+      position: relative;
+      z-index: 3;
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+      background: linear-gradient(to bottom, var(--bg-deep) 0%, #0f1318 50%, #12171d 100%);
+    }
+
+    .transition-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--accent-dim), transparent);
+      margin: 0 auto 1.5rem;
+    }
+
+    /* ===== 全息地图区 ===== */
+    .map-section {
+      position: relative;
+      z-index: 3;
+      padding: 2rem 2rem 6rem;
+      background: #0f1318;
+      overflow: hidden;
+    }
+
+    .map-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(60,207,207,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse at 30% 40%, rgba(240,163,75,0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .map-header {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 2.5rem;
+    }
+
+    .map-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .map-subtitle {
+      font-size: 0.85rem;
+      color: var(--neon-cyan);
+      letter-spacing: 0.15em;
+      font-family: monospace;
+    }
+
+    /* 地图容器 */
+    .map-container {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .map-svg-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      max-height: 520px;
+      background: radial-gradient(ellipse at center, rgba(30,38,50,0.8) 0%, rgba(15,19,24,0.95) 100%);
+      border: 1px solid rgba(42,47,54,0.6);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow:
+        0 0 60px rgba(60,207,207,0.06),
+        0 0 120px rgba(240,163,75,0.04);
+      cursor: default;
+    }
+
+    /* 网格线 — 全息感 */
+    .hologrid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(60,207,207,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(60,207,207,0.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 1;
+      mask-image: radial-gradient(ellipse at center, black 50%, transparent 90%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 50%, transparent 90%);
+    }
+
+    /* 扫描线 */
+    .scanline {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(60,207,207,0.3), transparent);
+      z-index: 2;
+      pointer-events: none;
+      animation: scanDown 4s infinite linear;
+    }
+
+    @keyframes scanDown {
+      0%   { top: 0%; opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .map-svg {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* 区域样式 */
+    .district-path {
+      fill: rgba(30,38,50,0.7);
+      stroke: rgba(42,47,54,0.8);
+      stroke-width: 1.5;
+      transition: fill 0.3s, stroke 0.3s, filter 0.3s;
+      cursor: pointer;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .district-path:hover {
+      stroke-width: 2;
+      filter: drop-shadow(0 0 8px var(--district-glow, rgba(240,163,75,0.5)));
+    }
+
+    .district-path.district-oldtown     { --district-glow: rgba(212,148,92,0.6); }
+    .district-path.district-night       { --district-glow: rgba(224,82,158,0.6); }
+    .district-path.district-industrial  { --district-glow: rgba(184,115,51,0.6); }
+    .district-path.district-tech        { --district-glow: rgba(60,207,207,0.6); }
+    .district-path.district-underground { --district-glow: rgba(139,92,246,0.6); }
+    .district-path.district-riverside   { --district-glow: rgba(226,176,74,0.6); }
+
+    .district-path.district-oldtown:hover     { fill: rgba(212,148,92,0.2); stroke: #d4945c; }
+    .district-path.district-night:hover       { fill: rgba(224,82,158,0.2); stroke: #e0529e; }
+    .district-path.district-industrial:hover  { fill: rgba(184,115,51,0.2); stroke: #b87333; }
+    .district-path.district-tech:hover        { fill: rgba(60,207,207,0.2); stroke: #3ccfcf; }
+    .district-path.district-underground:hover { fill: rgba(139,92,246,0.2); stroke: #8b5cf6; }
+    .district-path.district-riverside:hover   { fill: rgba(226,176,74,0.2); stroke: #e2b04a; }
+
+    /* 区域标签 */
+    .district-label {
+      fill: var(--text-muted);
+      font-size: 13px;
+      font-family: var(--font-display);
+      letter-spacing: 0.08em;
+      pointer-events: none;
+      transition: fill 0.3s;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .district-label-hover {
+      fill: var(--text-primary);
+      font-size: 13px;
+      font-family: var(--font-display);
+      letter-spacing: 0.08em;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    /* 地图上的锚点 (闪烁) */
+    .map-dot {
+      fill: var(--neon-cyan);
+      opacity: 0.7;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { r: 3; opacity: 0.7; }
+      50% { r: 5; opacity: 1; }
+    }
+
+    /* 河流 */
+    .river-path {
+      fill: none;
+      stroke: rgba(60,207,207,0.2);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+
+    .river-path-outer {
+      fill: none;
+      stroke: rgba(60,207,207,0.06);
+      stroke-width: 20;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+
+    /* 道路示意线 */
+    .road-line {
+      fill: none;
+      stroke: rgba(42,47,54,0.5);
+      stroke-width: 1;
+      stroke-dasharray: 6 4;
+      pointer-events: none;
+    }
+
+    /* 地图图例 */
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.2rem 2rem;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+
+    .legend-item:hover { color: var(--text-primary); }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-dot.ld-oldtown     { background: #d4945c; box-shadow: 0 0 6px #d4945c; }
+    .legend-dot.ld-night       { background: #e0529e; box-shadow: 0 0 6px #e0529e; }
+    .legend-dot.ld-industrial  { background: #b87333; box-shadow: 0 0 6px #b87333; }
+    .legend-dot.ld-tech        { background: #3ccfcf; box-shadow: 0 0 6px #3ccfcf; }
+    .legend-dot.ld-underground { background: #8b5cf6; box-shadow: 0 0 6px #8b5cf6; }
+    .legend-dot.ld-riverside   { background: #e2b04a; box-shadow: 0 0 6px #e2b04a; }
+
     /* ===== 引言区 ===== */
     .intro {
       position: relative;
@@ -166,6 +424,7 @@
       max-width: 720px;
       margin: 0 auto;
       text-align: center;
+      background: linear-gradient(to bottom, #12171d 0%, var(--bg-deep) 40%);
     }
 
     .intro-label {
@@ -231,18 +490,49 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 2rem 1.5rem;
-      transition: border-color 0.3s, transform 0.3s;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
     }
+
+    /* 角色卡片左侧色条 — 对应地图区域颜色 */
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 3px 0 0 3px;
+      transition: width 0.3s;
+    }
+
+    .card.card-oldtown::before     { background: #d4945c; }
+    .card.card-night::before       { background: #e0529e; }
+    .card.card-industrial::before  { background: #b87333; }
+    .card.card-tech::before        { background: #3ccfcf; }
+    .card.card-underground::before { background: #8b5cf6; }
+    .card.card-riverside::before   { background: #e2b04a; }
 
     .card:hover {
       border-color: var(--accent-dim);
       transform: translateY(-4px);
     }
 
-    .card-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+    .card:hover::before { width: 5px; }
+
+    /* 地图跳转高亮动画 */
+    .card.highlight {
+      animation: cardFlash 1.2s ease-out;
     }
+
+    @keyframes cardFlash {
+      0%   { box-shadow: 0 0 0 rgba(240,163,75,0); }
+      30%  { box-shadow: 0 0 32px var(--flash-color, rgba(240,163,75,0.5)); }
+      100% { box-shadow: 0 0 0 rgba(240,163,75,0); }
+    }
+
+    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
 
     .card-name {
       font-family: var(--font-display);
@@ -258,11 +548,51 @@
       letter-spacing: 0.05em;
     }
 
+    .card-zone-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.06em;
+      font-family: monospace;
+    }
+
+    .card-zone-tag.zt-oldtown     { background: rgba(212,148,92,0.15); color: #d4945c; }
+    .card-zone-tag.zt-night       { background: rgba(224,82,158,0.15); color: #e0529e; }
+    .card-zone-tag.zt-industrial  { background: rgba(184,115,51,0.15); color: #b87333; }
+    .card-zone-tag.zt-tech        { background: rgba(60,207,207,0.15); color: #3ccfcf; }
+    .card-zone-tag.zt-underground { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+    .card-zone-tag.zt-riverside   { background: rgba(226,176,74,0.15); color: #e2b04a; }
+
     .card-desc {
       font-size: 0.9rem;
       color: var(--text-secondary);
       line-height: 1.8;
     }
+
+    /* 地图浮动提示 */
+    .map-tooltip {
+      position: absolute;
+      pointer-events: none;
+      z-index: 10;
+      background: rgba(20,24,30,0.95);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      white-space: nowrap;
+      opacity: 0;
+      transform: translate(-50%, -130%);
+      transition: opacity 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+
+    .map-tooltip.visible { opacity: 1; }
+
+    .map-tooltip .tt-name { font-weight: 600; }
+    .map-tooltip .tt-hint { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.15rem; }
 
     /* ===== 页脚 ===== */
     .footer {
@@ -273,15 +603,24 @@
       text-align: center;
       color: var(--text-muted);
       font-size: 0.8rem;
+      background: linear-gradient(to bottom, var(--bg-deep) 0%, #0a0c10 100%);
     }
 
     .footer .accent { color: var(--accent-dim); }
 
-    /* ===== 响应式微调 ===== */
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      .map-svg-wrapper { aspect-ratio: 1/1; max-height: 380px; }
+      .district-label, .district-label-hover { font-size: 10px; }
+      .map-legend { gap: 0.6rem 1rem; }
+      .legend-item { font-size: 0.7rem; }
+    }
+
     @media (max-width: 600px) {
       .intro { padding: 4rem 1.5rem; }
       .characters { padding: 2rem 1rem 6rem; }
       .card-grid { grid-template-columns: 1fr; }
+      .map-svg-wrapper { aspect-ratio: 1/1; max-height: 300px; }
     }
   </style>
 </head>
@@ -289,15 +628,15 @@
 
   <!-- ============ 头图 ============ -->
   <section class="hero">
-    <!-- 城市天际线 SVG -->
+    <!-- 城市天际线 -->
     <div class="skyline">
       <svg viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax slice" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- 远楼（剪影层） -->
+        <!-- 远楼剪影 -->
         <rect x="60"  y="280" width="80"  height="220" fill="#11151a" rx="2"/>
         <rect x="160" y="220" width="100" height="280" fill="#12161c" rx="2"/>
         <rect x="280" y="260" width="70"  height="240" fill="#0f1318" rx="2"/>
         <rect x="370" y="190" width="90"  height="310" fill="#14181e" rx="2"/>
-        <rect x="480" y="300" width="60"  height="200" fill="#101419" rx="2"/>
+        <rect x="480" y="300" width="60"  height="200" fill="#10141a" rx="2"/>
         <rect x="560" y="170" width="110" height="330" fill="#13171d" rx="2"/>
         <rect x="690" y="250" width="85"  height="250" fill="#11151b" rx="2"/>
         <rect x="800" y="210" width="95"  height="290" fill="#12161c" rx="2"/>
@@ -306,25 +645,24 @@
         <rect x="1140" y="240" width="90"  height="260" fill="#11151b" rx="2"/>
         <rect x="1250" y="180" width="80"  height="320" fill="#13171d" rx="2"/>
         <rect x="1350" y="290" width="90"  height="210" fill="#0f1318" rx="2"/>
-
-        <!-- 窗户光点 -->
+        <!-- 窗户光点 — 琥珀 -->
         <g fill="#f0a34b" opacity="0.6">
-          <rect x="180" y="240" width="6" height="8" rx="1"/><rect x="195" y="260" width="6" height="8" rx="1"/>
-          <rect x="220" y="250" width="6" height="8" rx="1"/>
-          <rect x="390" y="220" width="6" height="8" rx="1"/><rect x="410" y="250" width="6" height="8" rx="1"/><rect x="430" y="210" width="6" height="8" rx="1"/>
-          <rect x="590" y="200" width="6" height="8" rx="1"/><rect x="615" y="240" width="6" height="8" rx="1"/><rect x="630" y="190" width="6" height="8" rx="1"/>
-          <rect x="820" y="240" width="6" height="8" rx="1"/><rect x="850" y="230" width="6" height="8" rx="1"/>
-          <rect x="1050" y="220" width="6" height="8" rx="1"/><rect x="1070" y="260" width="6" height="8" rx="1"/>
-          <rect x="1270" y="200" width="6" height="8" rx="1"/><rect x="1290" y="230" width="6" height="8" rx="1"/>
+          <rect x="180" y="240" width="5" height="7" rx="1"/><rect x="195" y="260" width="5" height="7" rx="1"/>
+          <rect x="220" y="250" width="5" height="7" rx="1"/>
+          <rect x="390" y="220" width="5" height="7" rx="1"/><rect x="410" y="250" width="5" height="7" rx="1"/><rect x="430" y="210" width="5" height="7" rx="1"/>
+          <rect x="590" y="200" width="5" height="7" rx="1"/><rect x="615" y="240" width="5" height="7" rx="1"/><rect x="630" y="190" width="5" height="7" rx="1"/>
+          <rect x="820" y="240" width="5" height="7" rx="1"/><rect x="850" y="230" width="5" height="7" rx="1"/>
+          <rect x="1050" y="220" width="5" height="7" rx="1"/><rect x="1070" y="260" width="5" height="7" rx="1"/>
+          <rect x="1270" y="200" width="5" height="7" rx="1"/><rect x="1290" y="230" width="5" height="7" rx="1"/>
         </g>
-        <!-- 霓虹光点 — 青色 -->
-        <g fill="#3ccfcf" opacity="0.5">
+        <!-- 窗户光点 — 青色 -->
+        <g fill="#3ccfcf" opacity="0.35">
           <rect x="300" y="280" width="5" height="7" rx="1"/><rect x="315" y="290" width="5" height="7" rx="1"/>
           <rect x="720" y="270" width="5" height="7" rx="1"/><rect x="740" y="285" width="5" height="7" rx="1"/>
           <rect x="1160" y="260" width="5" height="7" rx="1"/><rect x="1180" y="275" width="5" height="7" rx="1"/>
         </g>
-        <!-- 霓虹光点 — 粉色 -->
-        <g fill="#e0529e" opacity="0.4">
+        <!-- 窗户光点 — 粉色 -->
+        <g fill="#e0529e" opacity="0.3">
           <rect x="420" y="280" width="5" height="7" rx="1"/>
           <rect x="880" y="260" width="5" height="7" rx="1"/><rect x="900" y="280" width="5" height="7" rx="1"/>
           <rect x="1090" y="270" width="5" height="7" rx="1"/>
@@ -332,7 +670,7 @@
       </svg>
     </div>
 
-    <!-- 雾气渐变 -->
+    <!-- 雾气 -->
     <div class="fog"></div>
 
     <!-- 悬浮粒子 -->
@@ -347,7 +685,7 @@
       <div class="particle" style="left:92%; animation-delay:0.5s; animation-duration:6.5s;"></div>
     </div>
 
-    <!-- 文字内容 -->
+    <!-- 文字 -->
     <div class="hero-content">
       <h1 class="hero-brand">Menthol World</h1>
       <p class="hero-sub">—— 薄城 ——</p>
@@ -361,11 +699,162 @@
     <div class="scroll-hint">▼  向 下 探 索</div>
   </section>
 
-  <!-- ============ 引言 / 介绍 ============ -->
+  <!-- ============ 过渡区 ============ -->
+  <div class="transition-zone">
+    <div class="transition-line"></div>
+  </div>
+
+  <!-- ============ 全息地图 ============ -->
+  <section class="map-section" id="map-section">
+    <div class="map-header">
+      <h2 class="map-title">薄城 · 全域地图</h2>
+      <p class="map-subtitle">[ HOLOGRAPHIC CITY MAP v1.0 ]</p>
+    </div>
+
+    <div class="map-container">
+      <div class="map-svg-wrapper" id="mapWrapper">
+        <!-- 全息网格 -->
+        <div class="hologrid"></div>
+        <!-- 扫描线 -->
+        <div class="scanline"></div>
+
+        <!-- 浮动提示 -->
+        <div class="map-tooltip" id="mapTooltip">
+          <div class="tt-name"></div>
+          <div class="tt-hint">点击探索 →</div>
+        </div>
+
+        <!-- SVG 地图 -->
+        <svg class="map-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- 背景边框装饰 -->
+          <rect x="2" y="2" width="796" height="596" fill="none" stroke="rgba(42,47,54,0.3)" stroke-width="1" rx="4"/>
+          <rect x="6" y="6" width="788" height="588" fill="none" stroke="rgba(42,47,54,0.1)" stroke-width="0.5" rx="3"/>
+
+          <!-- 坐标标记 -->
+          <g opacity="0.25" font-family="monospace" font-size="9" fill="#6b6f75">
+            <text x="10" y="18">00</text><text x="10" y="146">01</text><text x="10" y="274">02</text>
+            <text x="10" y="402">03</text><text x="10" y="530">04</text>
+            <text x="160" y="592">06</text><text x="320" y="592">12</text><text x="480" y="592">18</text>
+            <text x="640" y="592">24</text>
+          </g>
+
+          <!-- 河流 -->
+          <path class="river-path-outer" d="M 0 240 C 180 220, 280 300, 400 280 C 520 260, 580 320, 800 300"/>
+          <path class="river-path" d="M 0 240 C 180 220, 280 300, 400 280 C 520 260, 580 320, 800 300"/>
+
+          <!-- 道路示意 -->
+          <path class="road-line" d="M 200 0 L 200 600"/>
+          <path class="road-line" d="M 420 0 L 420 600"/>
+          <path class="road-line" d="M 600 0 L 600 600"/>
+          <path class="road-line" d="M 0 160 L 800 160"/>
+          <path class="road-line" d="M 0 420 L 800 420"/>
+
+          <!-- ====== 六个城区 ====== -->
+
+          <!-- 旧城区 (左上) — 林屿 -->
+          <path class="district-path district-oldtown"
+                data-district="oldtown"
+                data-name="旧城区"
+                data-character="林屿 · 深夜便利店"
+                data-target="card-linyu"
+                d="M 40 50 L 220 40 L 240 180 L 200 260 L 60 240 L 30 140 Z"/>
+          <text class="district-label" x="125" y="140">旧 城 区</text>
+          <text class="district-label-hover" data-label-hover="oldtown" x="125" y="140" fill="#d4945c">旧 城 区</text>
+
+          <!-- 夜都区 (中上) — 苏晚 -->
+          <path class="district-path district-night"
+                data-district="night"
+                data-name="夜都区"
+                data-character="苏晚 · 地下酒吧"
+                data-target="card-suwan"
+                d="M 260 30 L 440 20 L 460 150 L 400 210 L 260 190 L 230 110 Z"/>
+          <text class="district-label" x="345" y="115">夜 都 区</text>
+          <text class="district-label-hover" data-label-hover="night" x="345" y="115" fill="#e0529e">夜 都 区</text>
+
+          <!-- 科技园 (右上) — 沈念 -->
+          <path class="district-path district-tech"
+                data-district="tech"
+                data-name="科技园"
+                data-character="沈念 · 互联网公司"
+                data-target="card-shennian"
+                d="M 470 30 L 760 20 L 770 170 L 600 200 L 480 150 Z"/>
+          <text class="district-label" x="620" y="110">科 技 园</text>
+          <text class="district-label-hover" data-label-hover="tech" x="620" y="110" fill="#3ccfcf">科 技 园</text>
+
+          <!-- 河畔文艺街 (右下, 河以南) — 顾安然 -->
+          <path class="district-path district-riverside"
+                data-district="riverside"
+                data-name="河畔文艺街"
+                data-character="顾安然 · 街角咖啡馆"
+                data-target="card-guanran"
+                d="M 460 300 L 760 290 L 770 450 L 600 440 L 480 380 Z"/>
+          <text class="district-label" x="620" y="375">河畔文艺街</text>
+          <text class="district-label-hover" data-label-hover="riverside" x="620" y="375" fill="#e2b04a">河畔文艺街</text>
+
+          <!-- 工业遗址 (左下) — 陆辞 -->
+          <path class="district-path district-industrial"
+                data-district="industrial"
+                data-name="工业遗址"
+                data-character="陆辞 · 自由摄影师"
+                data-target="card-luci"
+                d="M 30 270 L 240 250 L 260 400 L 200 480 L 40 460 Z"/>
+          <text class="district-label" x="135" y="370">工业遗址</text>
+          <text class="district-label-hover" data-label-hover="industrial" x="135" y="370" fill="#b87333">工业遗址</text>
+
+          <!-- 地下文化区 (中下) — 秦野 -->
+          <path class="district-path district-underground"
+                data-district="underground"
+                data-name="地下文化区"
+                data-character="秦野 · 地下乐队"
+                data-target="card-qinye"
+                d="M 270 200 L 450 190 L 460 310 L 400 450 L 250 460 L 230 320 Z"/>
+          <text class="district-label" x="345" y="335">地下文化区</text>
+          <text class="district-label-hover" data-label-hover="underground" x="345" y="335" fill="#8b5cf6">地下文化区</text>
+
+          <!-- 地图中心锚点 -->
+          <circle cx="400" cy="300" r="3" fill="#f0a34b" opacity="0.6" filter="url(#glow)">
+            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2s" repeatCount="indefinite"/>
+          </circle>
+
+        </svg>
+      </div>
+
+      <!-- 图例 -->
+      <div class="map-legend">
+        <div class="legend-item" data-district="oldtown">
+          <span class="legend-dot ld-oldtown"></span>旧城区
+        </div>
+        <div class="legend-item" data-district="night">
+          <span class="legend-dot ld-night"></span>夜都区
+        </div>
+        <div class="legend-item" data-district="tech">
+          <span class="legend-dot ld-tech"></span>科技园
+        </div>
+        <div class="legend-item" data-district="riverside">
+          <span class="legend-dot ld-riverside"></span>河畔文艺街
+        </div>
+        <div class="legend-item" data-district="industrial">
+          <span class="legend-dot ld-industrial"></span>工业遗址
+        </div>
+        <div class="legend-item" data-district="underground">
+          <span class="legend-dot ld-underground"></span>地下文化区
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 引言 ============ -->
   <section class="intro">
     <p class="intro-label">· 缔造者之言 ·</p>
     <p class="intro-quote">
-      这座城市的每个人，都是主角。
+      这座城市没有主角，或者说——人人都是主角。
     </p>
     <p class="intro-body">
       我是这个世界的缔造者，也是它的记录者。在这座薄城里，
@@ -373,19 +862,20 @@
       也许是摩天楼顶层俯瞰城市的精英，又或者是巷弄深处沉默的艺术家。
       每一个故事都有自己独特的质地与温度：有些冷峻如黑白胶片，
       有些迷幻如午夜霓虹，有些温暖如清晨的第一杯咖啡。<br><br>
-      欢迎你推开这扇门，走进他们的生活片段。
+      点击上方地图中的不同区域，走进他们的生活片段。
     </p>
   </section>
 
-  <!-- ============ 角色预览 ============ -->
+  <!-- ============ 角色卡片 ============ -->
   <section class="characters">
     <h2 class="section-title">城市居民</h2>
-    <p class="section-sub">以下是一些即将登场的面孔</p>
+    <p class="section-sub">点击地图区域可直达对应人物</p>
 
     <div class="card-grid">
 
-      <div class="card">
+      <div class="card card-oldtown" id="card-linyu">
         <div class="card-icon">🌧️</div>
+        <span class="card-zone-tag zt-oldtown">旧城区</span>
         <div class="card-name">林屿</div>
         <div class="card-role">深夜便利店 · 夜班店员</div>
         <p class="card-desc">
@@ -394,8 +884,9 @@
         </p>
       </div>
 
-      <div class="card">
+      <div class="card card-night" id="card-suwan">
         <div class="card-icon">🥃</div>
+        <span class="card-zone-tag zt-night">夜都区</span>
         <div class="card-name">苏晚</div>
         <div class="card-role">地下酒吧 · 调酒师</div>
         <p class="card-desc">
@@ -404,18 +895,9 @@
         </p>
       </div>
 
-      <div class="card">
-        <div class="card-icon">📷</div>
-        <div class="card-name">陆辞</div>
-        <div class="card-role">自由摄影师</div>
-        <p class="card-desc">
-          他的镜头追逐着城市中被遗忘的角落。破败的工厂、拆迁的老街、
-          凌晨四点的立交桥——他在废墟中寻找美的痕迹。
-        </p>
-      </div>
-
-      <div class="card">
+      <div class="card card-tech" id="card-shennian">
         <div class="card-icon">⌨️</div>
+        <span class="card-zone-tag zt-tech">科技园</span>
         <div class="card-name">沈念</div>
         <div class="card-role">互联网公司 · 程序员</div>
         <p class="card-desc">
@@ -424,8 +906,31 @@
         </p>
       </div>
 
-      <div class="card">
+      <div class="card card-riverside" id="card-guanran">
+        <div class="card-icon">☕</div>
+        <span class="card-zone-tag zt-riverside">河畔文艺街</span>
+        <div class="card-name">顾安然</div>
+        <div class="card-role">街角咖啡馆 · 老板</div>
+        <p class="card-desc">
+          她的咖啡馆是城市中的一座孤岛。推门进来的人各有各的故事，
+          而她用一杯手冲咖啡的时间，成为这座城市最温柔的倾听者。
+        </p>
+      </div>
+
+      <div class="card card-industrial" id="card-luci">
+        <div class="card-icon">📷</div>
+        <span class="card-zone-tag zt-industrial">工业遗址</span>
+        <div class="card-name">陆辞</div>
+        <div class="card-role">自由摄影师</div>
+        <p class="card-desc">
+          他的镜头追逐着城市中被遗忘的角落。破败的工厂、拆迁的老街、
+          凌晨四点的立交桥——他在废墟中寻找美的痕迹。
+        </p>
+      </div>
+
+      <div class="card card-underground" id="card-qinye">
         <div class="card-icon">🎸</div>
+        <span class="card-zone-tag zt-underground">地下文化区</span>
         <div class="card-name">秦野</div>
         <div class="card-role">地下乐队 · 主唱</div>
         <p class="card-desc">
@@ -434,24 +939,107 @@
         </p>
       </div>
 
-      <div class="card">
-        <div class="card-icon">☕</div>
-        <div class="card-name">顾安然</div>
-        <div class="card-role">街角咖啡馆 · 老板</div>
-        <p class="card-desc">
-          她的咖啡馆是城市中的一座孤岛。推门进来的人各有各的故事，
-          而她用一杯手冲咖啡的时间，成为这座城市最温柔地倾听者。
-        </p>
-      </div>
-
     </div>
   </section>
 
   <!-- ============ 页脚 ============ -->
   <footer class="footer">
-    <p>© 2026 <span class="accent">Menthol World</span> · 薄荷都市</p>
+    <p>© 2026 <span class="accent">Menthol World</span> · 薄城</p>
     <p style="margin-top:0.5rem;">所有故事由缔造者创作 · 城市永远在生长</p>
   </footer>
+
+  <!-- ============ 交互脚本 ============ -->
+  <script>
+  (function() {
+    const tooltip = document.getElementById('mapTooltip');
+    const ttName = tooltip.querySelector('.tt-name');
+
+    // 更新浮动提示位置
+    function moveTooltip(e) {
+      const rect = e.target.getBoundingClientRect();
+      tooltip.style.left = (rect.left + rect.width / 2) + 'px';
+      tooltip.style.top  = (rect.top) + 'px';
+    }
+
+    // 地图区域 hover
+    document.querySelectorAll('.district-path').forEach(function(path) {
+      path.addEventListener('mouseenter', function(e) {
+        var name = this.dataset.name;
+        var character = this.dataset.character;
+        ttName.textContent = name + ' — ' + character;
+        tooltip.classList.add('visible');
+        moveTooltip(e);
+
+        // 高亮对应 hover 标签
+        var hoverLabel = document.querySelector('[data-label-hover="' + this.dataset.district + '"]');
+        if (hoverLabel) hoverLabel.style.opacity = '1';
+      });
+
+      path.addEventListener('mousemove', function(e) {
+        moveTooltip(e);
+      });
+
+      path.addEventListener('mouseleave', function() {
+        tooltip.classList.remove('visible');
+        var hoverLabel = document.querySelector('[data-label-hover="' + this.dataset.district + '"]');
+        if (hoverLabel) hoverLabel.style.opacity = '0';
+      });
+
+      // 点击 → 滚动到对应角色卡片
+      path.addEventListener('click', function() {
+        var targetId = this.dataset.target;
+        var card = document.getElementById(targetId);
+        if (!card) return;
+
+        // 滚动
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // 高亮闪烁
+        card.classList.remove('highlight');
+        void card.offsetWidth; // 强制回流，让动画重新触发
+        card.classList.add('highlight');
+      });
+    });
+
+    // 图例也可点击
+    document.querySelectorAll('.legend-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var district = this.dataset.district;
+        var path = document.querySelector('.district-path[data-district="' + district + '"]');
+        if (path) path.click();
+      });
+    });
+
+    // 卡片 hover 时反向高亮地图
+    document.querySelectorAll('.card').forEach(function(card) {
+      card.addEventListener('mouseenter', function() {
+        var districtClass = '';
+        if (card.classList.contains('card-oldtown')) districtClass = 'oldtown';
+        else if (card.classList.contains('card-night')) districtClass = 'night';
+        else if (card.classList.contains('card-tech')) districtClass = 'tech';
+        else if (card.classList.contains('card-riverside')) districtClass = 'riverside';
+        else if (card.classList.contains('card-industrial')) districtClass = 'industrial';
+        else if (card.classList.contains('card-underground')) districtClass = 'underground';
+
+        if (districtClass) {
+          var path = document.querySelector('.district-path.district-' + districtClass);
+          if (path) {
+            path.style.strokeWidth = '2.5';
+            path.style.filter = 'drop-shadow(0 0 8px var(--district-glow, rgba(240,163,75,0.5)))';
+          }
+        }
+      });
+
+      card.addEventListener('mouseleave', function() {
+        document.querySelectorAll('.district-path').forEach(function(p) {
+          p.style.strokeWidth = '';
+          p.style.filter = '';
+        });
+      });
+    });
+
+  })();
+  </script>
 
 </body>
 </html>
