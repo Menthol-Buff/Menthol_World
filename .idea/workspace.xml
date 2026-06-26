@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4e9a3141-299e-4795-b804-3638ff95ef71" name="更改" comment="Page changes" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="4" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {}
+}]]></component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="2fe0f4d7-366b-4b63-98c6-886907e9517d" />
+  </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Menthol-Buff/Menthol_World.git",
+    "accountId": "2fe0f4d7-366b-4b63-98c6-886907e9517d"
+  }
+}]]></component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/index.html" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0" />
+      <entry key="S10" value="1.0000000216580252" />
+      <entry key="S30" value="1.0081332886237626" />
+      <entry key="S60" value="1.2018288689352208" />
+      <entry key="M2" value="2.0485232108007145" />
+      <entry key="M5" value="4.7963000916344205" />
+      <entry key="M10" value="8.48912235464923" />
+      <entry key="M15" value="11.074234241796404" />
+      <entry key="M30" value="15.341076443877261" />
+      <entry key="H1" value="18.576864163575998" />
+      <entry key="H2" value="20.61027398965986" />
+      <entry key="H4" value="21.756154138907355" />
+      <entry key="D1" value="22.785472120909972" />
+      <entry key="W1" value="22.969170606711092" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.9511790627630835E-23" />
+      <entry key="MS500" value="2.871173423809165E-5" />
+      <entry key="S2" value="0.07320063632617561" />
+      <entry key="S5" value="0.35140338652850195" />
+      <entry key="S10" value="0.5927928914829139" />
+      <entry key="S30" value="0.8481738751218135" />
+      <entry key="S60" value="1.1183496266261146" />
+      <entry key="M2" value="2.0058368551508985" />
+      <entry key="M5" value="4.778925576814785" />
+      <entry key="M10" value="8.480292801678255" />
+      <entry key="M15" value="11.068263290506529" />
+      <entry key="M30" value="15.338003719476685" />
+      <entry key="H1" value="18.57528894920239" />
+      <entry key="H2" value="20.60947317879386" />
+      <entry key="H4" value="21.75574986868968" />
+      <entry key="D1" value="22.785404150519575" />
+      <entry key="W1" value="22.969160881380848" />
+    </decayedShown>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3Fd8HcSQa9digdB3f7FmKbZh2ox" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.25134.95" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.25134.95" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="4e9a3141-299e-4795-b804-3638ff95ef71" name="更改" comment="" />
+      <created>1782393499711</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1782393499711</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Basic">
+      <option name="closed" value="true" />
+      <created>1782394219723</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1782394219723</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Basic">
+      <option name="closed" value="true" />
+      <created>1782394486357</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1782394486357</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Basic">
+      <option name="closed" value="true" />
+      <created>1782394669396</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1782394669396</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Name change">
+      <option name="closed" value="true" />
+      <created>1782395123654</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1782395123654</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Word changes">
+      <option name="closed" value="true" />
+      <created>1782395612041</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1782395612041</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Page changes">
+      <option name="closed" value="true" />
+      <created>1782396242955</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1782396242955</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Page changes">
+      <option name="closed" value="true" />
+      <created>1782396338459</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1782396338459</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Page changes">
+      <option name="closed" value="true" />
+      <created>1782396555053</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1782396555053</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="false" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Basic" />
+    <MESSAGE value="Name change" />
+    <MESSAGE value="Word changes" />
+    <MESSAGE value="Page changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Page changes" />
+  </component>
+</project>

@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menthol World</title>
+  <title>Menthol World — 薄城</title>
+  <link rel="icon" type="image/png" href="https://images.moecm.com/images/2026/06/25/Gemini_Generated_Image_q1t5tbq1t5tbq1t5.png">
   <style>
     /* ===== Reset & Base ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -190,7 +191,6 @@
       z-index: 3;
       padding: 2rem 2rem 6rem;
       background: #0f1318;
-      overflow: hidden;
     }
 
     .map-section::before {
@@ -416,6 +416,29 @@
     .legend-dot.ld-underground { background: #8b5cf6; box-shadow: 0 0 6px #8b5cf6; }
     .legend-dot.ld-riverside   { background: #e2b04a; box-shadow: 0 0 6px #e2b04a; }
 
+    /* 地图浮动提示 — 用 fixed 定位避免被 overflow:hidden 裁剪 */
+    .map-tooltip {
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      background: rgba(20,24,30,0.96);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      white-space: nowrap;
+      opacity: 0;
+      transform: translate(-50%, calc(-100% - 10px));
+      transition: opacity 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+
+    .map-tooltip.visible { opacity: 1; }
+
+    .map-tooltip .tt-name { font-weight: 600; }
+    .map-tooltip .tt-hint { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.15rem; }
+
     /* ===== 引言区 ===== */
     .intro {
       position: relative;
@@ -455,145 +478,6 @@
       line-height: 2;
     }
 
-    /* ===== 角色卡片 ===== */
-    .characters {
-      position: relative;
-      z-index: 3;
-      padding: 4rem 2rem 8rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      text-align: center;
-      margin-bottom: 0.8rem;
-      color: var(--text-primary);
-    }
-
-    .section-sub {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 3rem;
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem 1.5rem;
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* 角色卡片左侧色条 — 对应地图区域颜色 */
-    .card::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      border-radius: 3px 0 0 3px;
-      transition: width 0.3s;
-    }
-
-    .card.card-oldtown::before     { background: #d4945c; }
-    .card.card-night::before       { background: #e0529e; }
-    .card.card-industrial::before  { background: #b87333; }
-    .card.card-tech::before        { background: #3ccfcf; }
-    .card.card-underground::before { background: #8b5cf6; }
-    .card.card-riverside::before   { background: #e2b04a; }
-
-    .card:hover {
-      border-color: var(--accent-dim);
-      transform: translateY(-4px);
-    }
-
-    .card:hover::before { width: 5px; }
-
-    /* 地图跳转高亮动画 */
-    .card.highlight {
-      animation: cardFlash 1.2s ease-out;
-    }
-
-    @keyframes cardFlash {
-      0%   { box-shadow: 0 0 0 rgba(240,163,75,0); }
-      30%  { box-shadow: 0 0 32px var(--flash-color, rgba(240,163,75,0.5)); }
-      100% { box-shadow: 0 0 0 rgba(240,163,75,0); }
-    }
-
-    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
-
-    .card-name {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      margin-bottom: 0.3rem;
-      color: var(--text-primary);
-    }
-
-    .card-role {
-      font-size: 0.8rem;
-      color: var(--accent-dim);
-      margin-bottom: 1rem;
-      letter-spacing: 0.05em;
-    }
-
-    .card-zone-tag {
-      display: inline-block;
-      font-size: 0.7rem;
-      padding: 2px 8px;
-      border-radius: 3px;
-      margin-bottom: 0.8rem;
-      letter-spacing: 0.06em;
-      font-family: monospace;
-    }
-
-    .card-zone-tag.zt-oldtown     { background: rgba(212,148,92,0.15); color: #d4945c; }
-    .card-zone-tag.zt-night       { background: rgba(224,82,158,0.15); color: #e0529e; }
-    .card-zone-tag.zt-industrial  { background: rgba(184,115,51,0.15); color: #b87333; }
-    .card-zone-tag.zt-tech        { background: rgba(60,207,207,0.15); color: #3ccfcf; }
-    .card-zone-tag.zt-underground { background: rgba(139,92,246,0.15); color: #8b5cf6; }
-    .card-zone-tag.zt-riverside   { background: rgba(226,176,74,0.15); color: #e2b04a; }
-
-    .card-desc {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-
-    /* 地图浮动提示 */
-    .map-tooltip {
-      position: absolute;
-      pointer-events: none;
-      z-index: 10;
-      background: rgba(20,24,30,0.95);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.5rem 0.9rem;
-      font-size: 0.8rem;
-      color: var(--text-primary);
-      white-space: nowrap;
-      opacity: 0;
-      transform: translate(-50%, -130%);
-      transition: opacity 0.15s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-    }
-
-    .map-tooltip.visible { opacity: 1; }
-
-    .map-tooltip .tt-name { font-weight: 600; }
-    .map-tooltip .tt-hint { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.15rem; }
-
     /* ===== 页脚 ===== */
     .footer {
       position: relative;
@@ -618,8 +502,6 @@
 
     @media (max-width: 600px) {
       .intro { padding: 4rem 1.5rem; }
-      .characters { padding: 2rem 1rem 6rem; }
-      .card-grid { grid-template-columns: 1fr; }
       .map-svg-wrapper { aspect-ratio: 1/1; max-height: 300px; }
     }
   </style>
@@ -711,18 +593,12 @@
       <p class="map-subtitle">[ HOLOGRAPHIC CITY MAP v1.0 ]</p>
     </div>
 
-    <div class="map-container">
+    <div class="map-container" id="mapContainer">
       <div class="map-svg-wrapper" id="mapWrapper">
         <!-- 全息网格 -->
         <div class="hologrid"></div>
         <!-- 扫描线 -->
         <div class="scanline"></div>
-
-        <!-- 浮动提示 -->
-        <div class="map-tooltip" id="mapTooltip">
-          <div class="tt-name"></div>
-          <div class="tt-hint">点击探索 →</div>
-        </div>
 
         <!-- SVG 地图 -->
         <svg class="map-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
@@ -758,62 +634,56 @@
 
           <!-- ====== 六个城区 ====== -->
 
-          <!-- 旧城区 (左上) — 林屿 -->
+          <!-- 旧城区 (左上) -->
           <path class="district-path district-oldtown"
                 data-district="oldtown"
                 data-name="旧城区"
                 data-character="林屿 · 深夜便利店"
-                data-target="card-linyu"
                 d="M 40 50 L 220 40 L 240 180 L 200 260 L 60 240 L 30 140 Z"/>
           <text class="district-label" x="125" y="140">旧 城 区</text>
           <text class="district-label-hover" data-label-hover="oldtown" x="125" y="140" fill="#d4945c">旧 城 区</text>
 
-          <!-- 夜都区 (中上) — 苏晚 -->
+          <!-- 夜都区 (中上) -->
           <path class="district-path district-night"
                 data-district="night"
                 data-name="夜都区"
                 data-character="苏晚 · 地下酒吧"
-                data-target="card-suwan"
                 d="M 260 30 L 440 20 L 460 150 L 400 210 L 260 190 L 230 110 Z"/>
           <text class="district-label" x="345" y="115">夜 都 区</text>
           <text class="district-label-hover" data-label-hover="night" x="345" y="115" fill="#e0529e">夜 都 区</text>
 
-          <!-- 科技园 (右上) — 沈念 -->
+          <!-- 科技园 (右上) -->
           <path class="district-path district-tech"
                 data-district="tech"
                 data-name="科技园"
                 data-character="沈念 · 互联网公司"
-                data-target="card-shennian"
                 d="M 470 30 L 760 20 L 770 170 L 600 200 L 480 150 Z"/>
           <text class="district-label" x="620" y="110">科 技 园</text>
           <text class="district-label-hover" data-label-hover="tech" x="620" y="110" fill="#3ccfcf">科 技 园</text>
 
-          <!-- 河畔文艺街 (右下, 河以南) — 顾安然 -->
+          <!-- 河畔文艺街 (右下, 河以南) -->
           <path class="district-path district-riverside"
                 data-district="riverside"
                 data-name="河畔文艺街"
                 data-character="顾安然 · 街角咖啡馆"
-                data-target="card-guanran"
                 d="M 460 300 L 760 290 L 770 450 L 600 440 L 480 380 Z"/>
           <text class="district-label" x="620" y="375">河畔文艺街</text>
           <text class="district-label-hover" data-label-hover="riverside" x="620" y="375" fill="#e2b04a">河畔文艺街</text>
 
-          <!-- 工业遗址 (左下) — 陆辞 -->
+          <!-- 工业遗址 (左下) -->
           <path class="district-path district-industrial"
                 data-district="industrial"
                 data-name="工业遗址"
                 data-character="陆辞 · 自由摄影师"
-                data-target="card-luci"
                 d="M 30 270 L 240 250 L 260 400 L 200 480 L 40 460 Z"/>
           <text class="district-label" x="135" y="370">工业遗址</text>
           <text class="district-label-hover" data-label-hover="industrial" x="135" y="370" fill="#b87333">工业遗址</text>
 
-          <!-- 地下文化区 (中下) — 秦野 -->
+          <!-- 地下文化区 (中下) -->
           <path class="district-path district-underground"
                 data-district="underground"
                 data-name="地下文化区"
                 data-character="秦野 · 地下乐队"
-                data-target="card-qinye"
                 d="M 270 200 L 450 190 L 460 310 L 400 450 L 250 460 L 230 320 Z"/>
           <text class="district-label" x="345" y="335">地下文化区</text>
           <text class="district-label-hover" data-label-hover="underground" x="345" y="335" fill="#8b5cf6">地下文化区</text>
@@ -848,6 +718,12 @@
         </div>
       </div>
     </div>
+
+    <!-- 浮动提示 — 放在 map-container 外，用 fixed 定位 -->
+    <div class="map-tooltip" id="mapTooltip">
+      <div class="tt-name"></div>
+      <div class="tt-hint">点击探索 →</div>
+    </div>
   </section>
 
   <!-- ============ 引言 ============ -->
@@ -858,85 +734,11 @@
     </p>
     <p class="intro-body">
       我是这个世界的缔造者，也是它的记录者。在这座薄城里，
-      我追踪着不同人物的生活轨迹——<br><br>
-      点击上方地图中的不同区域，走进他们的生活片段。
+      我追踪着不同人物的生活轨迹——他们或许是深夜便利店的店员，
+      也许是摩天楼顶层俯瞰城市的精英，又或者是巷弄深处沉默的艺术家。
+      每一个故事都有自己独特的质地与温度：有些冷峻如黑白胶片，
+      有些迷幻如午夜霓虹，有些温暖如清晨的第一杯咖啡。
     </p>
-  </section>
-
-  <!-- ============ 角色卡片 ============ -->
-  <section class="characters">
-    <h2 class="section-title">城市居民</h2>
-    <p class="section-sub">点击地图区域可直达对应人物</p>
-
-    <div class="card-grid">
-
-      <div class="card card-oldtown" id="card-linyu">
-        <div class="card-icon">🌧️</div>
-        <span class="card-zone-tag zt-oldtown">旧城区</span>
-        <div class="card-name">林屿</div>
-        <div class="card-role">深夜便利店 · 夜班店员</div>
-        <p class="card-desc">
-          他见过凌晨三点的城市最真实的模样。孤独的上班族、失恋的女孩、
-          烂醉的流浪汉……便利店的自动门每晚都在上演人间短剧。
-        </p>
-      </div>
-
-      <div class="card card-night" id="card-suwan">
-        <div class="card-icon">🥃</div>
-        <span class="card-zone-tag zt-night">夜都区</span>
-        <div class="card-name">苏晚</div>
-        <div class="card-role">地下酒吧 · 调酒师</div>
-        <p class="card-desc">
-          她的吧台是城市秘密的中转站。每一杯酒换一个故事，
-          她听过太多，却从不开口评判。冰块撞击玻璃的声音里，藏着无数人的心事。
-        </p>
-      </div>
-
-      <div class="card card-tech" id="card-shennian">
-        <div class="card-icon">⌨️</div>
-        <span class="card-zone-tag zt-tech">科技园</span>
-        <div class="card-name">沈念</div>
-        <div class="card-role">互联网公司 · 程序员</div>
-        <p class="card-desc">
-          白天写代码，夜晚写小说。她在格子间与幻想世界之间反复横跳，
-          试图在算法与诗意之间找到一个属于自己的出口。
-        </p>
-      </div>
-
-      <div class="card card-riverside" id="card-guanran">
-        <div class="card-icon">☕</div>
-        <span class="card-zone-tag zt-riverside">河畔文艺街</span>
-        <div class="card-name">顾安然</div>
-        <div class="card-role">街角咖啡馆 · 老板</div>
-        <p class="card-desc">
-          她的咖啡馆是城市中的一座孤岛。推门进来的人各有各的故事，
-          而她用一杯手冲咖啡的时间，成为这座城市最温柔的倾听者。
-        </p>
-      </div>
-
-      <div class="card card-industrial" id="card-luci">
-        <div class="card-icon">📷</div>
-        <span class="card-zone-tag zt-industrial">工业遗址</span>
-        <div class="card-name">陆辞</div>
-        <div class="card-role">自由摄影师</div>
-        <p class="card-desc">
-          他的镜头追逐着城市中被遗忘的角落。破败的工厂、拆迁的老街、
-          凌晨四点的立交桥——他在废墟中寻找美的痕迹。
-        </p>
-      </div>
-
-      <div class="card card-underground" id="card-qinye">
-        <div class="card-icon">🎸</div>
-        <span class="card-zone-tag zt-underground">地下文化区</span>
-        <div class="card-name">秦野</div>
-        <div class="card-role">地下乐队 · 主唱</div>
-        <p class="card-desc">
-          他的嗓音像被烟草和梦想浸泡过。排练室在地下三层，
-          但他们的音乐总能穿透水泥，触及那些在夜色中游荡的灵魂。
-        </p>
-      </div>
-
-    </div>
   </section>
 
   <!-- ============ 页脚 ============ -->
@@ -951,14 +753,14 @@
     const tooltip = document.getElementById('mapTooltip');
     const ttName = tooltip.querySelector('.tt-name');
 
-    // 更新浮动提示位置
+    // 更新浮动提示位置 — 使用 fixed 定位，不会被 overflow:hidden 裁剪
     function moveTooltip(e) {
-      const rect = e.target.getBoundingClientRect();
+      var rect = e.target.getBoundingClientRect();
       tooltip.style.left = (rect.left + rect.width / 2) + 'px';
-      tooltip.style.top  = (rect.top) + 'px';
+      tooltip.style.top  = rect.top + 'px';
     }
 
-    // 地图区域 hover
+    // 地图区域交互
     document.querySelectorAll('.district-path').forEach(function(path) {
       path.addEventListener('mouseenter', function(e) {
         var name = this.dataset.name;
@@ -981,56 +783,28 @@
         var hoverLabel = document.querySelector('[data-label-hover="' + this.dataset.district + '"]');
         if (hoverLabel) hoverLabel.style.opacity = '0';
       });
-
-      // 点击 → 滚动到对应角色卡片
-      path.addEventListener('click', function() {
-        var targetId = this.dataset.target;
-        var card = document.getElementById(targetId);
-        if (!card) return;
-
-        // 滚动
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        // 高亮闪烁
-        card.classList.remove('highlight');
-        void card.offsetWidth; // 强制回流，让动画重新触发
-        card.classList.add('highlight');
-      });
     });
 
-    // 图例也可点击
+    // 图例 hover → 高亮对应地图区域
     document.querySelectorAll('.legend-item').forEach(function(item) {
-      item.addEventListener('click', function() {
+      item.addEventListener('mouseenter', function() {
         var district = this.dataset.district;
         var path = document.querySelector('.district-path[data-district="' + district + '"]');
-        if (path) path.click();
-      });
-    });
-
-    // 卡片 hover 时反向高亮地图
-    document.querySelectorAll('.card').forEach(function(card) {
-      card.addEventListener('mouseenter', function() {
-        var districtClass = '';
-        if (card.classList.contains('card-oldtown')) districtClass = 'oldtown';
-        else if (card.classList.contains('card-night')) districtClass = 'night';
-        else if (card.classList.contains('card-tech')) districtClass = 'tech';
-        else if (card.classList.contains('card-riverside')) districtClass = 'riverside';
-        else if (card.classList.contains('card-industrial')) districtClass = 'industrial';
-        else if (card.classList.contains('card-underground')) districtClass = 'underground';
-
-        if (districtClass) {
-          var path = document.querySelector('.district-path.district-' + districtClass);
-          if (path) {
-            path.style.strokeWidth = '2.5';
-            path.style.filter = 'drop-shadow(0 0 8px var(--district-glow, rgba(240,163,75,0.5)))';
-          }
+        if (path) {
+          path.style.strokeWidth = '2.5';
+          path.style.filter = 'drop-shadow(0 0 8px var(--district-glow, rgba(240,163,75,0.5)))';
+          var hoverLabel = document.querySelector('[data-label-hover="' + district + '"]');
+          if (hoverLabel) hoverLabel.style.opacity = '1';
         }
       });
 
-      card.addEventListener('mouseleave', function() {
+      item.addEventListener('mouseleave', function() {
         document.querySelectorAll('.district-path').forEach(function(p) {
           p.style.strokeWidth = '';
           p.style.filter = '';
+        });
+        document.querySelectorAll('.district-label-hover').forEach(function(l) {
+          l.style.opacity = '0';
         });
       });
     });
