@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e9a3141-299e-4795-b804-3638ff95ef71" name="更改" comment="Delete map">
+      <change afterPath="$PROJECT_DIR$/Image" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/zimuchen/子沐晨序章.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +16,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="9" />
+    <option name="cachedIndexableFilesCount" value="10" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,23 +42,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0000000002172387" />
-      <entry key="MS500" value="1.0116785097549605" />
-      <entry key="S2" value="1.3287356900512677" />
-      <entry key="S5" value="1.6408239624001912" />
-      <entry key="S10" value="1.800540109038486" />
-      <entry key="S30" value="1.9753036391387284" />
-      <entry key="S60" value="2.299596632266312" />
-      <entry key="M2" value="3.172085975406828" />
-      <entry key="M5" value="5.971158493753822" />
-      <entry key="M10" value="9.85763740894216" />
-      <entry key="M15" value="12.648020480907324" />
-      <entry key="M30" value="17.346132133692073" />
-      <entry key="H1" value="20.971653659375363" />
-      <entry key="H2" value="23.273648041856866" />
-      <entry key="H4" value="24.578228993625576" />
-      <entry key="D1" value="25.754376296969085" />
-      <entry key="W1" value="25.96469155597169" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0" />
+      <entry key="S10" value="1.0" />
+      <entry key="S30" value="1.0" />
+      <entry key="S60" value="1.0" />
+      <entry key="M2" value="1.0000000000196707" />
+      <entry key="M5" value="1.0001439557125795" />
+      <entry key="M10" value="1.0460391494418484" />
+      <entry key="M15" value="1.3575113677466695" />
+      <entry key="M30" value="4.041646970370753" />
+      <entry key="H1" value="10.245760410917676" />
+      <entry key="H2" value="17.3078059785551" />
+      <entry key="H4" value="22.724255690350944" />
+      <entry key="D1" value="28.63285444291783" />
+      <entry key="W1" value="29.800524818293084" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -77,23 +80,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9726549476192354" />
-      <entry key="MS500" value="1.0060358975638397" />
-      <entry key="S2" value="1.326553805007061" />
-      <entry key="S5" value="1.6396480404401448" />
-      <entry key="S10" value="1.7998690804410042" />
-      <entry key="S30" value="1.9710934415764434" />
-      <entry key="S60" value="2.285909002015928" />
-      <entry key="M2" value="3.1542726308172533" />
-      <entry key="M5" value="5.958438705521414" />
-      <entry key="M10" value="9.849845010611187" />
-      <entry key="M15" value="12.642415089571736" />
-      <entry key="M30" value="17.343066280169506" />
-      <entry key="H1" value="20.970034293751585" />
-      <entry key="H2" value="23.272812576545086" />
-      <entry key="H4" value="24.577804141322506" />
-      <entry key="D1" value="25.75430443326375" />
-      <entry key="W1" value="25.964681262961296" />
+      <entry key="MS100" value="0.2932087373079697" />
+      <entry key="MS500" value="0.7824117817365113" />
+      <entry key="S2" value="0.9405000985281929" />
+      <entry key="S5" value="0.9757611848225023" />
+      <entry key="S10" value="0.9878062486249529" />
+      <entry key="S30" value="0.9959187825316703" />
+      <entry key="S60" value="0.9979573049643308" />
+      <entry key="M2" value="0.9989781303930614" />
+      <entry key="M5" value="0.9997349513128325" />
+      <entry key="M10" value="1.0458094000738245" />
+      <entry key="M15" value="1.3572509607410597" />
+      <entry key="M30" value="4.04111557874626" />
+      <entry key="H1" value="10.245087106024208" />
+      <entry key="H2" value="17.307255905236868" />
+      <entry key="H4" value="22.723902569075488" />
+      <entry key="D1" value="28.632781825785568" />
+      <entry key="W1" value="29.800514062151507" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -122,7 +125,7 @@
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "F:/Menthol_World/Image",
+    "last_opened_file_path": "F:/Menthol_World/zimuchen",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -133,6 +136,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\Menthol_World\zimuchen" />
       <recent name="F:\Menthol_World\Image" />
     </key>
   </component>
@@ -232,7 +236,15 @@
       <option name="project" value="LOCAL" />
       <updated>1782472616649</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Delete map">
+      <option name="closed" value="true" />
+      <created>1782560797069</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1782560797069</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
