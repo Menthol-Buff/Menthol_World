@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e9a3141-299e-4795-b804-3638ff95ef71" name="更改" comment="Delete map">
-      <change afterPath="$PROJECT_DIR$/Image" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zimuchen/子沐晨序章.docx" afterDir="false" />
+    <list default="true" id="4e9a3141-299e-4795-b804-3638ff95ef71" name="更改" comment="Add 子沐晨序章">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raw_text.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/zimuchen.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,7 +17,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="10" />
+    <option name="cachedIndexableFilesCount" value="19" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -43,22 +44,22 @@
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
       <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0" />
-      <entry key="S10" value="1.0" />
-      <entry key="S30" value="1.0" />
-      <entry key="S60" value="1.0" />
-      <entry key="M2" value="1.0000000000196707" />
-      <entry key="M5" value="1.0001439557125795" />
-      <entry key="M10" value="1.0460391494418484" />
-      <entry key="M15" value="1.3575113677466695" />
-      <entry key="M30" value="4.041646970370753" />
-      <entry key="H1" value="10.245760410917676" />
-      <entry key="H2" value="17.3078059785551" />
-      <entry key="H4" value="22.724255690350944" />
-      <entry key="D1" value="28.63285444291783" />
-      <entry key="W1" value="29.800524818293084" />
+      <entry key="MS500" value="1.000000000199029" />
+      <entry key="S2" value="1.0055504632629044" />
+      <entry key="S5" value="1.1888246853967246" />
+      <entry key="S10" value="1.6508179722388334" />
+      <entry key="S30" value="2.6889973088015013" />
+      <entry key="S60" value="3.2263186500968284" />
+      <entry key="M2" value="3.5767077132928704" />
+      <entry key="M5" value="3.8209696231927874" />
+      <entry key="M10" value="3.9523195376726874" />
+      <entry key="M15" value="4.283712954689715" />
+      <entry key="M30" value="6.95706734975757" />
+      <entry key="H1" value="13.148247188123012" />
+      <entry key="H2" value="20.22754231768355" />
+      <entry key="H4" value="25.672024135332332" />
+      <entry key="D1" value="31.621947288634004" />
+      <entry key="W1" value="32.79890445981769" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -80,23 +81,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.2932087373079697" />
-      <entry key="MS500" value="0.7824117817365113" />
-      <entry key="S2" value="0.9405000985281929" />
-      <entry key="S5" value="0.9757611848225023" />
-      <entry key="S10" value="0.9878062486249529" />
-      <entry key="S30" value="0.9959187825316703" />
-      <entry key="S60" value="0.9979573049643308" />
-      <entry key="M2" value="0.9989781303930614" />
-      <entry key="M5" value="0.9997349513128325" />
-      <entry key="M10" value="1.0458094000738245" />
-      <entry key="M15" value="1.3572509607410597" />
-      <entry key="M30" value="4.04111557874626" />
-      <entry key="H1" value="10.245087106024208" />
-      <entry key="H2" value="17.307255905236868" />
-      <entry key="H4" value="22.723902569075488" />
-      <entry key="D1" value="28.632781825785568" />
-      <entry key="W1" value="29.800514062151507" />
+      <entry key="MS100" value="5.152225366750068E-39" />
+      <entry key="MS500" value="2.2196308700711147E-8" />
+      <entry key="S2" value="0.01771375926861415" />
+      <entry key="S5" value="0.36004526501009115" />
+      <entry key="S10" value="1.0640506760745245" />
+      <entry key="S30" value="2.4326771236759326" />
+      <entry key="S60" value="3.0882925473572422" />
+      <entry key="M2" value="3.5049925278160665" />
+      <entry key="M5" value="3.791600433541137" />
+      <entry key="M10" value="3.9374941041099962" />
+      <entry key="M15" value="4.27369934445641" />
+      <entry key="M30" value="6.951652200001538" />
+      <entry key="H1" value="13.145130280731266" />
+      <entry key="H2" value="20.225769149959298" />
+      <entry key="H4" value="25.671058841757596" />
+      <entry key="D1" value="31.62177251261923" />
+      <entry key="W1" value="32.79887910562861" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -114,26 +115,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "F:/Menthol_World/zimuchen",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/Menthol_World/zimuchen&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\Menthol_World\zimuchen" />
@@ -244,7 +245,23 @@
       <option name="project" value="LOCAL" />
       <updated>1782560797069</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Add 子沐晨序章">
+      <option name="closed" value="true" />
+      <created>1782565948405</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1782565948405</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Add 子沐晨序章">
+      <option name="closed" value="true" />
+      <created>1782566041453</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1782566041453</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -275,6 +292,7 @@
     <MESSAGE value="Word changes" />
     <MESSAGE value="Page changes" />
     <MESSAGE value="Delete map" />
-    <option name="LAST_COMMIT_MESSAGE" value="Delete map" />
+    <MESSAGE value="Add 子沐晨序章" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add 子沐晨序章" />
   </component>
 </project>
