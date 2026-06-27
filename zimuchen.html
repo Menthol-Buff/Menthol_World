@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>子沐晨 · 序章</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #121215;
+    font-family: "Noto Serif SC", "STSong", "SimSun", "KaiTi", "STKaiti", "宋体", "楷体", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 16px 0 40px;
+  }
+
+  /* ── 工具栏 ── */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #1e1e22;
+    border-bottom: 1px solid #333;
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.4);
+  }
+  .toolbar .back-btn {
+    min-width: auto; height: 32px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 13px;
+    color: #aaa;
+    cursor: pointer;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    text-decoration: none;
+    position: absolute;
+    left: 20px;
+  }
+  .toolbar .back-btn:hover { background: #2a2a30; color: #ddd; border-color: #888; }
+
+  /* 章节相关按钮 */
+  .toolbar .restart-btn {
+    width: auto; height: 32px;
+    border-radius: 6px;
+    padding: 0 14px;
+    font-size: 13px;
+    border: 1px solid #444;
+    background: #2a2a30;
+    color: #ccc;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .toolbar .restart-btn:hover { background: #3a3a42; border-color: #666; }
+
+  .toolbar .next-chapter-btn {
+    width: auto; height: 32px;
+    border-radius: 6px;
+    padding: 0 14px;
+    font-size: 13px;
+    border: 1px solid var(--accent, #f0a34b);
+    background: transparent;
+    color: var(--accent, #f0a34b);
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.2s;
+    white-space: nowrap;
+    display: none;  /* 默认隐藏，末页显示 */
+  }
+  .toolbar .next-chapter-btn:hover { background: rgba(240,163,75,0.12); }
+
+  .toolbar .chapter-select {
+    height: 32px;
+    border-radius: 6px;
+    padding: 0 10px;
+    font-size: 13px;
+    border: 1px solid #444;
+    background: #2a2a30;
+    color: #ccc;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+  }
+  .toolbar .chapter-select:hover,
+  .toolbar .chapter-select:focus { border-color: #777; }
+  .toolbar .chapter-select option {
+    background: #1e1e22;
+    color: #ccc;
+  }
+
+  /* 工具栏分隔线 */
+  .toolbar .divider {
+    width: 1px; height: 20px;
+    background: #333;
+    margin: 0 2px;
+  }
+  .toolbar label { font-size: 14px; color: #aaa; }
+  .toolbar button {
+    min-width: 34px; height: 34px;
+    border: 1px solid #444;
+    border-radius: 50%;
+    background: #2a2a30;
+    font-size: 18px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+    color: #ccc;
+    line-height: 1;
+  }
+  .toolbar button:hover { background: #3a3a42; border-color: #666; }
+  .toolbar .nav-btn {
+    width: auto; height: 32px;
+    border-radius: 6px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+  .toolbar .font-label { min-width: 50px; text-align: center; font-size: 14px; font-weight: 500; color: #ccc; }
+  .toolbar .page-indicator { font-size: 14px; color: #999; min-width: 110px; text-align: center; }
+
+  /* ── 书页容器 ── */
+  .book-viewport {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  /* ── A4 书页 (210mm × 297mm) ── */
+  .page {
+    width: 794px;
+    height: 1123px;
+    background: #1c1c21;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.5), 0 0 1px rgba(255,255,255,0.05);
+    padding: 76px 84px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .page-content {
+    font-size: 16px;
+    line-height: 1.9;
+    color: #c8c8cc;
+    text-align: justify;
+    word-break: break-all;
+    height: 100%;
+    overflow: hidden;
+  }
+  .page-content p { text-indent: 2em; margin-bottom: 0.35em; }
+  .page-content p.no-indent { text-indent: 0; }
+  .page-content .chapter-title {
+    text-align: center;
+    font-size: 1.6em;
+    font-weight: bold;
+    margin: 1em 0 0.9em;
+    text-indent: 0;
+    letter-spacing: 0.4em;
+    color: #ddd;
+  }
+  .page-content .separator {
+    text-align: center;
+    text-indent: 0;
+    margin: 0.5em 0;
+    letter-spacing: 0.5em;
+    color: #777;
+  }
+  .page-content .chapter-end {
+    text-align: center;
+    text-indent: 0;
+    margin-top: 1em;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    color: #aaa;
+  }
+  .page-number {
+    position: absolute;
+    bottom: 36px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 1px;
+  }
+
+  /* ── 小屏适配 ── */
+  @media screen and (max-width: 840px) {
+    .page {
+      width: calc(100vw - 16px);
+      height: calc((100vw - 16px) * 1.4142);
+      padding: 10mm 12mm;
+    }
+    .page-number { bottom: 6mm; }
+    .toolbar { gap: 6px; padding: 8px 10px; }
+    .toolbar button { min-width: 28px; height: 28px; font-size: 15px; }
+    .toolbar .back-btn { position: static; font-size: 12px; padding: 0 10px; height: 28px; }
+    .toolbar .restart-btn { font-size: 11px; padding: 0 8px; height: 28px; }
+    .toolbar .next-chapter-btn { font-size: 11px; padding: 0 8px; height: 28px; }
+    .toolbar .chapter-select { font-size: 11px; height: 28px; padding: 0 6px; }
+    .toolbar .divider { display: none; }
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .toolbar { display: none; }
+    .next-chapter-btn { display: none !important; }
+    .book-viewport { margin-top: 0; gap: 0; }
+    .page {
+      background: #fff;
+      box-shadow: none;
+      page-break-after: always;
+    }
+    .page-content { color: #111; }
+    .page-content .chapter-title { color: #111; }
+    .page-content .separator { color: #555; }
+    .page-content .chapter-end { color: #333; }
+    .page-number { color: #999; }
+    .page:last-child { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a class="back-btn" href="index.html" title="返回薄城">◂ 返回薄城</a>
+  <label>字号</label>
+  <button id="btn-down" title="缩小">−</button>
+  <span class="font-label" id="font-label">16px</span>
+  <button id="btn-up" title="放大">+</button>
+  <button class="nav-btn" id="btn-prev">◀ 上一页</button>
+  <span class="page-indicator" id="page-info">第 1 / 1 页</span>
+  <button class="nav-btn" id="btn-next">下一页 ▶</button>
+  <span class="divider"></span>
+  <button class="restart-btn" id="btn-restart" title="回到本章节开头">↺ 回到开头</button>
+  <select class="chapter-select" id="chapter-select" title="章节选择"></select>
+  <button class="next-chapter-btn" id="btn-next-chapter" title="下一章节">下一章节 ▶</button>
+</div>
+
+<div class="book-viewport" id="viewport"></div>
+
+<script>
+(function() {
+  /* ═══════════════ 原始文本 ═══════════════ */
+  var text = [
+    "序章",
+    "我想，人类的恶是与生俱来的。迫害他人时，总是毫不留情，心狠手辣。当面对自己的错误时，则又一笑而过。总是以旁观他人，无所作为的我，不断狠毒地点评着世界上的所有人，想必也是恶的一份子。",
+    "“都是因为你生了这么个倒霉玩意，最后才让我落得这种下场！早知道这样，当初就应该打掉！”男人大叫着，用手指着女人的鼻尖。",
+    "“那也是因为你自己的坏种！再说了，你自己出去打牌把钱输光了，关我什么事？把气撒我身上是吧？”女人也不甘示弱，怒目圆瞪着男人。",
+    "我站在一旁，看着自己父母因为我的存在而恶言相向，直至大打出手。",
+    "为了暂时逃离灾难，我回到卧室，打开了窗。正值隆冬，寒风吹在脸上，冻得生疼。今天的戏剧，我早已见怪不怪，从我记事起，他们二人就经常这样，只是频率还在逐渐变高。随着女人摔门的一声巨响，争吵声戛然而止，这场冷酷的战争来到了下一阶段。",
+    "男人走进我的房间，手中握着从拖布上拆下来的钢管，真好笑，当自己是那齐天大圣么...？我差点笑出声，嘴角微微抽动。我现在的表情应该也很滑稽吧，而他果然在我的火上浇油后变得更加狂躁。",
+    "“你还有脸笑？！我真是造了八辈子的孽才遇到你们娘俩，两个畜生，猪狗不如的东西！每天花着我的钱，供你去学校学习，你还能把椅子坐坏了？你那倒霉学校也是真黑，就个破木头椅子还让我去赔钱，什么椅子能这么贵啊？要不你干脆就这样退学算了，反正你成绩也就那样。我真的不理解，你连生活都不能自理吗？你不给我找些事情，是不是就浑身难受？”",
+    "他在飙垃圾话的同时，高举手中的钢管，狠狠地砸到我的身上。第一下，先是小腿，钢管打到骨头上，发出清脆的声音。第二下，是我的侧腹，一瞬间的窒息使我躬下身子。第三下，打在了后脑，眼前瞬间变成雪花般灰白，终于无法掌握平衡，倒在地上。他的发泄依旧没有结束，直到钢管断成两节摔落在地的声音。",
+    "我蜷缩在地上，不愿睁开眼睛。",
+    "我再也感受不到我的下半身了。",
+    "当天晚上，我拿起藏在枕头下的椅子腿，看着上边的钉子，暗暗下定决心。我用双手撑在地上，缓慢地爬行。下半身拖在地上，发出类似窗外狂风肆虐的声响。不知过了多久，我总算爬到了男人的床前，将带有钉子的椅子腿高举过头顶，狠狠地向他脖子扎了下去。",
+    "男人大喊着从睡梦中醒来，用手死死捂住脖子，却无法阻止鲜血喷涌而出，他眼睛瞪得溜圆，嘴中咒骂着不成句子的话，还没来得及对我反击，就已倒在了血泊中，再也无法醒来。",
+    "听到声响的女人只是来到房间瞥了一眼，就去拿起早已收拾好的行李，离开了这个是非之地。",
+    "这种结局...真是让人笑不出来。",
+    "我拖着沾满鲜血的下半身，回到属于自己的卧室，将书桌抽屉中准备好的纸条放在了桌面上，这样警察也就不会去纠缠那个女人了。",
+    "我重新打开窗，感受最后一次冬夜寒风，天空合时宜地飘起了雪，将我的泪冻结在了眼角。",
+    "我艰难地翻过窗，祈求不要砸到某人的身上，任凭自己开始下坠。这一瞬间，眼前闪过记忆中的各种场景，最后定格在了从未发生过的，一家三口站在游乐园旋转木马前的景象。眼前再次变得朦胧，不知是因为后悔，还是什么其他原因。事已至此，已经无足轻重了。一瞬过后，眼前变成了永无止境的黑色。",
+    "可是一切都没能如我所愿，一切都只不过是我的臆想。我的腿并没有失去知觉，我也并没有把断掉的椅子腿拿回家，我也没有勇气去亲手葬送这个男人。我站在那里，忍受着他狂风暴雨般的殴打。",
+    "一片碎片从钢管的断裂处飞出来，扎到了我的腿上，我低头看着鲜血从大腿流出。就算这样，他仍在用弯曲的钢管抽打着我。钢管断成两节，地上满是铁屑，他终于消气，让我自己去用酒精消毒，用绷带缠一下。",
+    "我点了点头，他斜了我一眼，离开了我的卧室。",
+    "我拉开抽屉，将写好的字条撕碎，丢到了窗外，我无法想像如果这个字条被看到了，会是怎样的下场。反抗？呵...我早已失去了那种能力，只能当一只顺从的狗。",
+    "哦，对了，该处理伤口了。",
+    "我用酒精浸湿药棉，摁在伤口处，一股熟悉又揪心的疼痛涌了上来。简单的消毒后，用绷带缠好，开始做今天学校老师留的家庭作业。",
+    "“早知道就在学校抄一下同桌的了...”我轻声抱怨，手中的笔却不敢停下，因为我听到那个人又站在身后不远处，监视着我的一举一动。",
+    "我就似玻璃罐中的蛐蛐，无论怎样挣扎，终究也无法逃出。",
+    "好痛。",
+    "......",
+    "在校期间是我为数不多能够放松的时段，这里没有那么恐怖的氛围，也没有时时刻刻都在的监视者，唯一需要糊弄过去的只是老师而已。",
+    "作为那种平平无常的角色，能够和大家正常交流，绝不会成为群体的焦点，一直保持中立的态度，没有什么敌人，当然也不会有特别熟悉的同学。",
+    "你可能会认为这又是一个青春男主的成功模板，对此我保持否定态度，我不会像他们那样善良，或者无意间显露出某种优良品质，我只会让自己成为最无聊的学生。为了让同学们对我毫无兴趣，成为那种可有可无的存在。",
+    "在与同学们的日常交流中，我收集到了不少情报，契机也许就在其中。",
+    "作为一名已经初中三年级的学生，中考即将来临。自认为只要选择一个远一点的学校，就能够暂时远离那个恐怖的牢笼。然而选择权并不在我的手上，如果只是普通的高中，那个人绝对又会大打出手，因此唯有考进重点高中，才能躲过此劫。",
+    "提升自己的同时，还能暂时逃走，需要担心的只是自己的成绩了。",
+    "“子沐辰，放学之后来办公室一趟。”中年女人的声音出现在教室的后方。不知为何，班主任总是喜欢在悄无声息中打破宁静，让所有同学产生一种风雨欲来的感觉，原本安静的自习课瞬间开始躁动起来。",
+    "“都给我闭上嘴，低头做自己的事。”班主任也是达成了目的，随后与我对上视线。我轻轻点头回应，她便关上了后门，高跟鞋的声音逐渐远去。",
+    "果不其然，焦点聚集在了我的身上。前桌转过头，问我究竟发生什么事了。同桌也用手指戳了戳我，示意让我详细说明。甚至远在教室另一边的同学，都伸着脖子看向我这边。班长见状，赶快趁事件还没进一步扩大而组织纪律，使出“再说话就记名”的杀手锏。",
+    "真是无聊，这些人要么是真闲的没事干，要么是在害怕自己的秘密遭到败露，想从我的嘴里套出什么有用的线索。但是很抱歉，我真心没有揭秘你们的打算。于是我冲着他们笑了笑，埋头继续写手中的数学卷，强行无视掉他们追问的神情，一直到放学时间。",
+    "“我也不知道她找我到底是问什么事，等我明天来学校之后再跟你们汇报。”我对着围过来的人摆了摆手，随后向教师办公室走去。",
+    "可是一走出教室门，我就隐隐觉得有什么事情要发生了，仔细观察四周，也没有找到违和的点，就连放学后熙攘的走廊也是那样一如既往。为了进一步判断不安的来源，我将目光转向窗外，与一个女生对上了视线。她就那样站在教学楼前的空地上，直勾勾地盯着这边，我们之间明明有五楼的距离，我却仍能感受到她散发出来的幽邃寒意。下一秒，好似达成了目的一样，她别开了目光，转身离去，混入了放学的大部队中，我心中的不安感也随之消除。",
+    "......",
+    "“这次我叫你过来知不知道是什么原因？”中年女人翘着二郎腿，低着头用红笔批改着试卷。不知道是因为试卷做得太差，还是我到访的时机不太好，她的语气有些焦躁。",
+    "“唔...我最近应该没做什么吧...？”我试探着回答，一边观察着她脸上的表情，可惜她低着头，无法准确地判断。为了寻找线索，我将视线转向她身后的另外一位老师，不知为何，他对上我视线的一瞬间后就低下了头，装成在翻看教案的模样，线索应该就在这边。",
+    "“你再仔细想想，不要在这里揣着明白装糊涂。”中年女人用带有愠意的语气再次说道，但是仍然没有抬起头来，继续批改着手中的试卷。这个时候，那位男老师开始做下班的准备了，往包里迅速装着书本和水杯，动作看起来慌慌张张的。",
+    "真是奇怪...说来，之前也没有见过这个老师，是新来的吗？我观察着他身上的衣服，白色的衬衫上有些许红色的污渍，颜色淡到几乎看不出来，如果不是那里有用水浸过的痕迹，可能我就无法发现了。是血吗？不对，颜色没那么深，而且学校里怎么可能发生命案呢，我应该减少探案小说的摄入了。",
+    "“是之前我坐坏学校椅子的事情吗？”我苦笑着，猜测着可能的选项。这时候的女人终于停下了手中的笔，抬起头看向我，然后摇了摇头。",
+    "“你父亲已经把钱交完了，今天找你是想要了解一下班上的同学，最近有人跟我汇报说我们班的某些同学在厕所抽烟，你有什么头绪吗？”她紧盯着我，想要看出我是否在隐瞒什么。我也紧盯回去，因为我发现她口红的颜色与那位男老师衬衫上的颜色完全不同，因此具体发生什么就需要相关性更强的确凿证据了。",
+    "“这我还真的不太知道，我周围的人也没有抽烟的迹象。”我装作思考的样子，心中早已明晰她口中的那几位究竟是谁。说实话，我更想了解关于那位男老师的事项，不过我既然没有权利僭越询问，也只好怀揣着疑问等待答案揭晓了。",
+    "“问你什么你都不知道，想从你嘴里套出点什么真的很难。”中年女人叹了口气，摆了摆手，示意我离开。我赔着笑脸点了点头，离开了教师办公室。到最后，我也没能弄明白那位男教师衬衫上的淡淡红色究竟是由何而来。如果...那个水渍正是误导选项，也就意味着我注意的关键选错了么...",
+    "回到家后，只有那个女人自己侧卧在沙发上，正无聊地刷着视频，看到我回来，也只是瞥了一眼，就将视线放回手机屏幕上。男人多半又打牌去了，家中已经几乎没有他身上刺鼻的烟味，我不太想见到他，所以这也算一件好事。晚饭当然是没有的，幸好我有中午从食堂留下来的两个包子，就这样凑合一下吧。",
+    "今天从同学口中了解到，只有一所重点高中实行着封闭式管理，学生在校期间无法联系到外界，因此这里正适合作为我升学的目标，我也相信这里一定能够帮助我逃离牢笼。同时，需要达到的分数正是我能够伸手碰到的距离，虽然不是炫耀，但是我的成绩并没有不堪入目，在班上也算是中等偏上人士。毕竟如果没有得到让他满意的成绩，他就会以此为借口，痛打我一顿。",
+    "......",
+    "既然目标已经明确，接下来只需要想办法在正式考试中拿到想要的分数就好了。",
+    "于是在第二天的放学后，我来到了教师办公室。这里和往常一样，只有班主任留在桌前批改作业，其他老师很早就提前下班了。至于为什么她总是留到很晚，我只有一些无聊的猜测。",
+    "同学们总说班主任的孩子也在这所学校读书，但是从来没见过他们母子俩一起离开过学校，也许是有特殊的家规，也有可能只是母子不合。而我则是认为班主任只是不想让她孩子的身份暴露，从而获得一位能够混在学生当中的“间谍”。这样看来，班主任几天前收到「有同学在抽烟」的消息来源就明晰了。",
+    "依照这个线索推断...她的孩子应该与我们同岁不同班，否则怎么会不能知道那些抽烟的同学的名字？估计是在卫生间遇到了那些人，不过他从低年级跑到高年级来特意监视的可能性也并非没有。这些无关紧要的小事就想到这里吧，这次来主要是问班主任一些升学上的问题的。",
+    "“真是稀客啊，子沐辰，你终于是犯什么事了？你总不会是来问我题的吧？”她抬头警惕地看着我，嘴角似笑非笑的有些上扬，手中的红笔一次次点在正批改的卷子上，她是感到有些焦躁么...因为我的到来？难道是她认为终于能掌握我的把柄，而感到有些激动吗？",
+    "我迅速地用余光瞥了一眼她的身后，并没有上次那位男老师存在的痕迹。",
+    "“啊...我就是想来跟您讨论一下关于升学的事。您也知道我们家的状况，跟他们讨论应该是行不通的，所以就想来找您问问。”我用有些为难的语气，加上不断躲闪的目光，恭敬地面对她。虽然很抱歉，但她应该是得不到我的把柄了。",
+    "果然，她放下了手中的笔，收起了嘴角的笑容，甚至整个人的状态都暗淡了几分。",
+    "“既然你都来问我了，你心里肯定是有什么打算了，那就跟我说说吧。”她的语气中充满着无奈。",
+    "社会的进度因为各种原因而加快，学生的压力也正不断提高，简单来说，就是越来越“卷”了。虽然无数家长都在说要让孩子健康快乐就好，但是通过互相的比拼与沟通，总会认为自己的孩子仍然需要更进一步的提升，否则就会被其他人落在身后。这其中，感受最深的当属“班主任”这个职位了，他们可谓是从以前到现在一直追赶着不断变化的教学内容，因此他们也许会对未来的变化有些敏锐的感知。而我就是要抓住这一点，抓住这些看似虚无缥缈的机会。",
+    "跟班主任聊了一下我的目标与计划后，空气陷入了片刻沉默。",
+    "“子沐辰，你认为，你能申请到那所学校吗？”她的表情有些纠结，甚至皱起了眉头。",
+    "“这么说有些自大，不过按照我现在的分数，应该是没有很大的问题吧？”我笑了笑，想让她把话说完。",
+    "“你的家长，他们会让你去吗？他们极度想掌握你的人生，所以并不会心甘情愿放你离开吧。”她微微摇头，似乎已经看到这件事的结果。“就算你能偷偷把第一志愿换成别的学校，他们也会通过各种方式阻止你去吧。你最后也只能去那一所他们想让你去的学校。”班主任继续说着，用手中的红笔在草稿纸上画着圆圈，也许这样有助于她表达自己的想法。",
+    "“对于如何报志愿，我有一些自己的想法。您说的很对，我的家庭基本上确定会阻止我的个人意志，是我没有考虑周到，谢谢老师。”我满怀感激地鞠躬，表现出恍然大悟的样子。我缓缓离开了办公室，没去管班主任有些疑惑的表情。",
+    "我当然了解我的家庭，她所说的那些也只不过是没有营养的套话。我也只是要做好面子工程，再之后的事情，我就希望她不要纠正我的想法，静静等待事情的发展。",
+    "......",
+    "全市统一考试的分数发下来的那天，和我预想的差不多，依然处于班级排名的中游地带。不过这一次，我把答案额外记在了一张草稿纸上，将其夹进课本，以便之后使用。我小心翼翼，生怕有其他同学问我在做什么。",
+    "几天后，市里把标准答案公布了出来，我把那张草稿纸从课本里抽出来，摊在桌上。那两道我私自改错的题，我用没改之前的正确步骤，重新誊了一遍。我一项一项地核对过去，笔尖落在纸上很轻，以防引来他人的关注。分数算出来的那一刻，我盯着那个数字，没有动。我又重新算了一遍乘法那一步，生怕自己漏看了哪个小数点。那所全封闭高中往年的录取线，我背得比任何课文都熟，而眼前这个数字，比那条线高出一大截。",
+    "我装作一身轻松，强忍笑意，将这张已经被我汗水浸湿的草稿纸丢进了垃圾桶。这大概是我这十五年里，第一次为自己做了一件真正令人欣喜的事。",
+    "......",
+    "但是正向的气氛总是容易被怨气扑灭，也是那个月，家里的电费单成了一件值得吵架的事。",
+    "晚饭过后，男人坐在沙发上翻手机。他忽然把手机拍在茶几上，声音很响。“这个月电费怎么多了快一半？”他盯着我，声音不高，带着一种审讯的腔调，“家里就你天天在屋里待着，是不是又偷偷玩手机了？”",
+    "“没有。”这两个字说出来的时候，我心里在过一道题：电费的事，和那个真正的原因之间，到底隔着多远的距离，他会不会顺着这条线往下扯。我很快得出答案——大概不会，他向来懒得思考超过一层的因果。",
+    "“没有电费能多出这么多？”他从沙发上站起来，朝我房间走去，“我数着钱过日子，你倒是会享受。”他看了我一眼，意思是让我跟着他。",
+    "我把这间屋子在脑子里检查了一遍，资料藏得够不够深，草稿纸在不在视线之内。说出真正的原因只会引来更多的问题——为什么突然这么用功，打算考哪所，打算又是什么。比起任何解释，“没有”是最省事的答案，省事到我觉得，这是我为数不多擅长的事。",
+    "他在我书桌前站定。他的目光扫过那几本摊开的复习资料，又拉开抽屉。他没找到手机，脸色却没有因此缓和，反而更难看了，像是没找到证据这件事本身，就足够构成证据。也是...他只是因为电费而心情不好，想找一个发泄的出口罢了。",
+    "“我跟你说话，你哑巴了？！”他的语调变得高昂，情绪也不再平稳，变得激动。",
+    "我没说话。心里有个很冷静的声音告诉我，这时候开口解释只会更糟，沉默至少能让这件事尽快结束，虽然结束的方式我也清楚是什么。他一把扯下搭在椅背上的皮带。",
+    "第一下打在肩上。皮带扣磕到骨头，闷响一声，疼痛先于声音抵达。我下意识缩了一下，没有躲。脑子里却荒诞地冒出一句不知道哪里看来的话——“棒打不孝子”，大概此刻在他心里，自己正扮演着一个义正词严的角色吧。我想到这里，几乎要笑，又把那点笑意压回喉咽。",
+    "“我白天在外面赚钱，你在家里就干这种事？”他每说一句抽一下。皮带有时候落在空气里，啪的一声，跟肩背上的闷响交替着，“你对得起谁？这个家里除了你自己，你谁都对不起！”",
+    "......",
+    "等他骂累了摔门出去，我才慢慢坐回椅子上。后背一抽一抽地发烫，我没去揉，只是把摊在桌上的资料重新归位。台灯的光线落在书页上，和刚才一样，没有任何变化。",
+    "......",
+    "中考前第三天，下午第一节课后是班会。这个时候，学校已经不再授课，并且也不会给学生们功课了。",
+    "铃声响过快五分钟，讲台上还是没有人。前排几个同学探头看向走廊，班长清了清嗓子，准备维持纪律。教室里的议论声渐渐放开，有人小声讨论着考前最后这几天该不该再做题，有人翻起了别的科目的卷子，整间教室像是被按了暂停又突然解除限制。",
+    "我没有参与这些讨论，只是把手边那张数学卷翻到背面，细想不同类型题的解答方法。",
+    "班主任出现的时候，班会已经过去了将近一半。",
+    "后门被用力推开，她快步走上讲台，没有了平日里那种规整的节奏。我抬眼看过去，她额前几缕碎发从盘起的发髻里散出来，垂在眼角附近衬衫最上面那颗扣子没扣进对应的扣眼里，歪斜地搭在领口外侧。她在讲台边站定，呼吸还没完全平复。",
+    "“今天耽误大家时间了。”她说这句话的时候没有抬头看任何人，径直从教案里抽出一张纸，开始念中考前的注意事项，声音比平时低了一些，咬字也含混了几个字。",
+    "班里的议论声没有立刻停下，反倒因为她这反常的状态多绕了几个弯，几个人交换着眼神，像是在用眼神核对彼此猜测的版本。我没有加入这场无声的揣测，只是想，大概是午休睡得太死，被铃声硬生生薅醒，又来不及梳头就往教室跑——这个解释虽然平淡，却比那几个交换的眼神所暗示的任何版本都更说得通。毕竟那间办公室连张能让人躺平的沙发都没有，趴着睡到口水浸湿试卷的事，也总是在这间教室上演。",
+    "班会内容很快念完，无非是考场纪律、准考证位置、提前到场时间这些，我一边听，一边把数学卷翻回正面，继续刚才没做完的那道题。",
+    "铃声响起，宣布下课，同学们陆陆续续往外走的时候，班主任叫住了我。“子沐辰，你留一下。”教室很快空了大半，几个还在收拾书包的同学也加快了动作离开。我走到讲台边，她已经坐回了自己的位置，手里捏着我这半年的成绩单，纸张边缘被她的指甲蹭出一道浅浅的折痕。",
+    "“你的分数，我仔细看了。”她抬头看我，眼神里带着一种我熟悉的、近似宣判前的迟疑，“按现在这个名次，那所学校的线，你很有可能够不上，报名的时候还是按照你父亲的来吧。”",
+    "我低头看着自己的鞋尖，没有立刻说话。这是我早就预演过的对话，只是没想到会来得这么直白。“嗯。”我应了一声，肩膀垂下去一点，“我大概也猜到了。”",
+    "“是不是有点失望？”她的语气软下来，像是怕我承受不住。",
+    "“还行。”我笑了一下，那种笑容我练习过很多次，比真心的失落更轻，又比毫不在意更重，“反正家里大概也不会让我跑那么远，与其去争取，不如老老实实考个就近的，省得到时候白高兴。”我摇了摇头，叹了口气。",
+    "她沉默了几秒，手指无意识地抚平那张纸边缘的折痕，没再追问下去。我能看出她没有完全信我这句话，却也找不到立场再继续劝什么。",
+    "“考场上的事谁都说不准，争取超常发挥一下，说不定真能拿到那张通知书。”她看着我，稍微笑了笑。",
+    "我点了点头，谢过她，转身往外走。走到门口的时候，我在心里把这句话又过了一遍。",
+    "超常发挥...吗...",
+    "我确实会拿到那张通知书，只是不会是靠超常发挥。",
+    "......",
+    "中考第一天，天还没亮透，考点门口已经挤满了人。家长们靠在车边打哈欠，手里拎着保温杯和折叠扇，孩子们三三两两站着，互相确认有没有忘记带2B铅笔，有没有把橡皮多备一块。我从公交车上下来，没有人朝我这边张望，也没有人替我背书包，这片喧闹和我之间隔着一段不需要谁去维持的距离。",
+    "考点设在另一所中学，校门贴着分考场名单，密密麻麻的名字按准考证号排列。我扫到自己的名字，对应的考场是三楼第二排，同一行还有几个完全没见过的名字，应该是别的学校混进来的。",
+    "进考场的时候，我看见一个有些熟悉的身影，我们曾互相眺望，有过一面之缘，那位女生已经坐在前一排靠窗的位置。她没有看我，正低头摆弄笔袋的拉链，拉开又合上，合上又拉开。我走到自己的座位坐下，目光从她背影上收回来，没有停留太久。",
+    "监考老师进来后说的第一句话是把准考证和身份证放在桌角，整场考试不能收起来。我把自己那张压在桌角，瞥见她也做了同样的动作，那张纸的边角从我这个位置看过去，只露出小半张。",
+    "语文卷子发下来，我没有像平时那样先扫一遍整张卷子估算时间，而是直接从第一题开始往下做，一道接一道，中途没有停顿去想任何与考卷无关的事。监考老师的脚步声偶尔从身后经过，停一下，又继续往前走。这种微小的干扰，对于生活在好似雷雨交加的家庭中的我，简直是白噪音一般令人安心。",
+    "后面几天的科目像是被压缩进同一段记忆里——数学、英语、理化、政治历史合卷，每一场之间的间隔只够我啃完一个面包，灌下半瓶水，再被铃声重新拽回到下一张卷子前。监考老师反复重复着同样几句开考须知，语速和语调都没什么差别，我甚至能在他们开口之前，提前在心里把那几句话默完。",
+    "英语听力那段，喇叭里的录音放到一半，我已经把要填的空全部填完，剩下的时间只能枯坐着等。教室里没有人说话，只有喇叭里那个机械的女声继续念着下一段对话。我的视线没什么目的地飘了一圈，落在她桌角那张准考证上。",
+    "那张纸被她压得很平，名字那一栏正对着我这个角度。",
+    "苏馨悦。",
+    "我把这三个字在心里念了一遍，没有再多想什么，喇叭里的录音正好播到下一题，我把视线收回试卷上。",
+    "最后一场考试结束的铃声响起的时候，监考老师喊了一声“停笔”，整间教室同时响起一片合上笔帽、收拾文具的声音。我把准考证从桌角收进口袋，转身往外走，经过她那一排的时候，她已经站起来，正低头把笔袋拉链拉上，没有看我这边一眼。",
+    "我们两个人前后脚走出考场，没有说一句话。我愣在考点门口，看着考生们冲向自己的父母，笑着宣告着这一段战斗的结束。由着这一瞬间内心的冲动，我寻着苏馨悦的背影，她与一位年轻女性混入了校门口攒动的人群里，很快就不见了踪影。",
+    "中考就这样...结束了。",
+    "......",
+    "中考成绩公布那天，学校把分数通过短信发到了备案的手机号上。那个号码是父亲的，从小到大，所有跟我有关的注册信息，用的都是他的号码，仿佛我连一个被通知的资格，都要经过他的手才能拿到。",
+    "此时正是为数不多的家庭晚餐时间，他的手机震动了一下。他扒着碗里的饭，低头瞥了一眼屏幕，没太在意，几秒后又重新点开那条短信，这次皱起了眉头。",
+    "“这什么学校？”他对着手机自言自语，手指在屏幕上点了两下，把短信又读了一遍。",
+    "我没有抬头，继续吃饭，筷子碰到碗沿的声音比平时轻了一些。",
+    "“我什么时候报的这个学校？”他抬眼看向我，语气还算平静，只是带着一点没找到答案的烦躁，“这不是我给你填的那几个。”",
+    "“可能是学校指标统调了吧。”我说，声音保持在一个听起来合理又不至于引人深究的平淡区间里。",
+    "他没接这句话，而是从口袋里翻出老花镜，凑近屏幕又看了一遍学校的全称，确认自己没看错。我能看到他太阳穴那块的皮肤动了一下，像是某种正在积蓄的东西找到了出口。",
+    "“子沐晨！你他妈又在给我玩什么花样？”他把手机拍在桌上，碗筷被震得叮当作响，“我给你报的是哪个，我记得一清二楚！变成这个的原因？你当我不知道吗？！”",
+    "......",
+    "那是报名截止的前一天晚上。",
+    "客厅那边又因为钱的事吵了起来，我没细听，只隐隐约约捕捉到“打麻将”“又是你”这几个词反复出现在两人的嘶吼里。摔门声响过一轮之后，争吵并没有结束，只是换了一种更低、更黏的频率继续。",
+    "我趁机坐到父亲的书桌前，打开电脑。系统页面跳出来的时候，客厅那边正好传来一声很响的拍桌子声，紧跟着便是母亲的哭腔。我没有理会，只是把光标移到第一志愿那一栏，删掉父亲填好的那所学校，换上自己早就记熟的那个名字。",
+    "确认键按下去之后，页面弹出“修改成功”的绿色提示框。我关上电脑，正准备从这个龙潭虎穴离开，突然有脚步声正在逼近。脚步声很重，带着一种踩不准地面的摇晃感，还有一股很冲的酒气迎风而来。我迅速躲到桌子下方，祈祷着一切顺利。",
+    "那几秒里，我脑子里很冷静地过了一遍接下来该怎么解释，如果他发现了我，该用什么表情。这些念头过得很快，却一个都没用上。",
+    "脚步声歪歪斜斜地往床上走去，中途还撞到了我躲藏于此的桌子，发出了一声闷响，他骂了一句，声音含糊不清。再之后就是床板被压塌下去的那一声重响，然后就是突如其来的鼾声。",
+    "我偷偷从他的卧室溜走，回到自己的房间，换了一身早已被冷汗浸湿的衬衫，埋头于复习资料中。",
+    "......",
+    "“系统的事我不太清楚。”我把碗放下，想要抬头看向他，但是以失败告终。“分数出来比预想的高，可能是按志愿优先级自动调剂的。”我小心翼翼地说着，生怕惹怒到他的逆鳞。",
+    "“调剂？”他的声音又拔高了一截，手掌拍在桌上，震得我的碗往前滑了一截。“老子辛辛苦苦给你选的学校，被你说成调剂？”",
+    "他从椅子上站起来，这个动作我太熟悉了，通常意味着接下来会有什么东西被抄起来。我没有躲，想了想我在脑海中早已预演过的台词。",
+    "“你是不是背着我自己改的？”他盯着我，手上已握着那根擀面杖。",
+    "我没有否认，也没有承认，只是说了另一件事。",
+    "“这所学校的升学率是很高的，并且学校排在薄城的第三名。”我阐述着事实，希望他能听懂我的言外之意。“前年的省状元，就是这所学校的学生。”",
+    "这句话像是找到了一个开关。他脸上那种正在积蓄的怒气没有立刻消失，却开始往另一个方向偏移，从“被冒犯”慢慢转向某种更熟悉的东西，我见过这种转变，通常发生在他听到了什么能在牌桌上拿出去说的好消息时。",
+    "“你这畜生，干什么事都不知道提前说一声，搞得跟做贼一样。”他语气里那点凶狠被压下去了大半。",
+    "我低下头，没有反驳这句话里的讽刺意味。",
+    "他重新坐回去，端起碗，这场对话就这样被他自己轻巧地结束了，仿佛刚才那阵几乎要落到我身上的怒火，只是一场误会带来的风雨罢了。",
+    "我没有动，只是看着碗里那点已经凉透的菜。",
+    "“还吃吗？”他瞥了我一眼，见我没什么动静，就把我碗里的菜播到了他的碗中。“不吃就赶紧回屋去，高中的东西提前看看，别到时候去了跟不上，又给我丢人。”",
+    "“嗯。”我把筷子放下，应了一声，从椅子上站起来。",
+    "我走回自己的房间，坐到自己的书桌前，迷离了一会，才感觉到那种紧绷着的力道一点一点从身体里退出去。我没有笑，只是觉得后背那点残存的凉意慢慢散开了，混着一种说不清的安心——这场赌局，我终于毫发无损地走出来了。",
+    "窗外的天色还亮着，不像冬天那样落雪。我推开窗，风里已经有了点夏天的气味，再过不到两个月，我就要离开这间屋子了。",
+    "......",
+    "序章·完"
+  ];
+
+  /* ═══════════════ DOM 引用 ═══════════════ */
+  var viewport  = document.getElementById('viewport');
+  var fontLabel = document.getElementById('font-label');
+  var pageInfo  = document.getElementById('page-info');
+
+  /* ═══════════════ 状态 ═══════════════ */
+  var STORAGE_KEY = 'zimuchen-reading-pos';
+  var fontSize    = 16;
+  var pages       = [];   // [{start: N, end: N}, ...]
+  var currentPage = 0;
+
+  /* ═══════════════ 章节数据 ═══════════════ */
+  var chapters = [
+    { title: '序章', file: 'zimuchen.html', current: true }
+    // 后续章节在此添加，例如:
+    // { title: '第一章', file: 'zimuchen-ch01.html', current: false }
+  ];
+
+  /* ═══════════════ 记忆功能 ═══════════════ */
+  function savePos() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        page: currentPage,
+        fontSize: fontSize
+      }));
+    } catch(e) { /* 无痕模式或存储满，静默忽略 */ }
+  }
+
+  function loadPos() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var data = JSON.parse(raw);
+        if (typeof data.fontSize === 'number' && data.fontSize >= 10 && data.fontSize <= 32) {
+          fontSize = data.fontSize;
+        }
+        if (typeof data.page === 'number' && data.page >= 0) {
+          currentPage = data.page;
+        }
+      }
+    } catch(e) { /* 数据损坏，用默认值 */ }
+  }
+
+  /* ═══════════════ 工具函数 ═══════════════ */
+  function esc(str) {
+    var el = document.createElement('span');
+    el.textContent = str;
+    return el.innerHTML;
+  }
+
+  function buildHTML(para) {
+    if (para === '序章')   return '<p class="chapter-title">序　章</p>';
+    if (para === '序章·完') return '<p class="chapter-end">序章·完</p>';
+    if (para === '......') return '<p class="separator">······</p>';
+    return '<p>' + esc(para) + '</p>';
+  }
+
+  /* ═══════════════ 分页（增量测量） ═══════════════ */
+  function paginate() {
+    pages = [];
+
+    // 创建测量容器 —— 放在 body 末尾，位置固定但 off-screen
+    // 不使用 visibility:hidden，避免某些浏览器不渲染
+    var m = document.createElement('div');
+    m.className = 'page';
+    m.style.position = 'fixed';
+    m.style.left = '-9999px';
+    m.style.top = '0';
+    m.style.zIndex = '-1';
+
+    var mc = document.createElement('div');
+    mc.className = 'page-content';
+    m.appendChild(mc);
+    document.body.appendChild(m);
+
+    // 应用当前字号
+    mc.style.fontSize = fontSize + 'px';
+
+    // 计算可用高度：page 总高 - 上下 padding
+    var mStyle = window.getComputedStyle(m);
+    var maxH = parseFloat(mStyle.height) - parseFloat(mStyle.paddingTop) - parseFloat(mStyle.paddingBottom);
+
+    // 增量构建页面
+    var i = 0;
+    var total = text.length;
+
+    while (i < total) {
+      var pageStart = i;
+      // 至少放一个段落
+      mc.innerHTML = buildHTML(text[i]);
+      i++;
+
+      // 继续加段落直到溢出
+      while (i < total) {
+        var before = mc.innerHTML;
+        mc.innerHTML = before + buildHTML(text[i]);
+        if (mc.scrollHeight > maxH + 2) {
+          // 溢出，回退
+          mc.innerHTML = before;
+          break;
+        }
+        i++;
+      }
+
+      pages.push({ start: pageStart, end: i - 1 });
+    }
+
+    // 清理
+    document.body.removeChild(m);
+
+    // 修正当前页
+    if (currentPage >= pages.length) {
+      currentPage = Math.max(0, pages.length - 1);
+    }
+  }
+
+  /* ═══════════════ 渲染当前页 ═══════════════ */
+  function render() {
+    viewport.innerHTML = '';
+
+    if (pages.length === 0) {
+      viewport.innerHTML = '<p style="color:#999;margin-top:40px;">加载中...</p>';
+      return;
+    }
+
+    var pg = pages[currentPage];
+
+    var pageDiv = document.createElement('div');
+    pageDiv.className = 'page';
+
+    var contentDiv = document.createElement('div');
+    contentDiv.className = 'page-content';
+    contentDiv.style.fontSize = fontSize + 'px';
+
+    var html = '';
+    for (var k = pg.start; k <= pg.end; k++) {
+      html += buildHTML(text[k]);
+    }
+    contentDiv.innerHTML = html;
+
+    var pn = document.createElement('div');
+    pn.className = 'page-number';
+    pn.textContent = '— ' + (currentPage + 1) + ' / ' + pages.length + ' —';
+
+    pageDiv.appendChild(contentDiv);
+    pageDiv.appendChild(pn);
+    viewport.appendChild(pageDiv);
+
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    fontLabel.textContent = fontSize + 'px';
+    pageInfo.textContent = '第 ' + (currentPage + 1) + ' / ' + pages.length + ' 页';
+
+    // 末页显示「下一章节」，否则隐藏
+    var nextBtn = document.getElementById('btn-next-chapter');
+    if (currentPage >= pages.length - 1) {
+      nextBtn.style.display = 'inline-flex';
+    } else {
+      nextBtn.style.display = 'none';
+    }
+
+    savePos();
+  }
+
+  function repaginate() {
+    paginate();
+    render();
+  }
+
+  /* ═══════════════ 翻页 ═══════════════ */
+  function go(n) {
+    if (n < 0 || n >= pages.length) return;
+    currentPage = n;
+    render();
+  }
+  function next() { if (currentPage < pages.length - 1) { currentPage++; render(); } }
+  function prev() { if (currentPage > 0) { currentPage--; render(); } }
+
+  /* ═══════════════ 事件绑定 ═══════════════ */
+  document.getElementById('btn-up').addEventListener('click', function() {
+    if (fontSize < 32) { fontSize++; repaginate(); }
+  });
+  document.getElementById('btn-down').addEventListener('click', function() {
+    if (fontSize > 10) { fontSize--; repaginate(); }
+  });
+  document.getElementById('btn-prev').addEventListener('click', prev);
+  document.getElementById('btn-next').addEventListener('click', next);
+  document.getElementById('btn-restart').addEventListener('click', function() {
+    go(0);
+  });
+  document.getElementById('btn-next-chapter').addEventListener('click', function() {
+    // 查找下一个非当前章节
+    var found = false;
+    for (var ci = 0; ci < chapters.length; ci++) {
+      if (chapters[ci].current) continue;
+      if (!found) {
+        found = true;
+        if (chapters[ci].file) {
+          window.location.href = chapters[ci].file;
+          return;
+        }
+      }
+    }
+    // 没有下一章节
+    alert('敬请期待下一章节。');
+  });
+
+  // 章节选择下拉
+  var chapterSelect = document.getElementById('chapter-select');
+  function populateChapterSelect() {
+    chapterSelect.innerHTML = '';
+    for (var ci = 0; ci < chapters.length; ci++) {
+      var opt = document.createElement('option');
+      opt.value = ci;
+      opt.textContent = chapters[ci].title;
+      if (chapters[ci].current) opt.selected = true;
+      chapterSelect.appendChild(opt);
+    }
+  }
+  populateChapterSelect();
+  chapterSelect.addEventListener('change', function() {
+    var idx = parseInt(this.value);
+    if (isNaN(idx) || idx < 0 || idx >= chapters.length) return;
+    var ch = chapters[idx];
+    if (ch.current) return; // 已经是当前章节
+    if (ch.file) {
+      window.location.href = ch.file;
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    var key = e.key;
+    if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'PageUp') {
+      e.preventDefault(); prev();
+    } else if (key === 'ArrowRight' || key === 'ArrowDown' || key === 'PageDown' || key === ' ') {
+      e.preventDefault(); next();
+    } else if (key === 'Home') {
+      e.preventDefault(); go(0);
+    } else if (key === 'End') {
+      e.preventDefault(); go(pages.length - 1);
+    }
+  });
+
+  // 触摸滑动翻页
+  var tx = 0, ty = 0;
+  document.addEventListener('touchstart', function(e) {
+    tx = e.touches[0].clientX;
+    ty = e.touches[0].clientY;
+  });
+  document.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - tx;
+    var dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx < 0 ? next() : prev();
+    }
+  });
+
+  /* ═══════════════ 启动 ═══════════════ */
+  loadPos();       // 恢复上次阅读位置
+  paginate();      // 用恢复的字号分页
+  if (currentPage >= pages.length) {
+    currentPage = Math.max(0, pages.length - 1);
+  }
+  render();
+})();
+</script>
+</body>
+</html>
